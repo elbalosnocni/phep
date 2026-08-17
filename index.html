@@ -7,6 +7,12 @@
 <style>
 *{box-sizing:border-box}body{margin:0;padding:24px;font-family:Arial,sans-serif;background:#f3f4f6}
 .card{max-width:620px;margin:30px auto;background:#fff;padding:26px;border-radius:18px;box-shadow:0 5px 24px rgba(0,0,0,.08)}
+
+.nav-tabs { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 20px auto; }
+.nav-tab { display: flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 30px; background: #fff; color: #334155; font-weight: 600; text-decoration: none; border: 1px solid #e5e7eb; transition: .25s; }
+.nav-tab:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.12); color: #2563eb; }
+.nav-tab.active { background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; border: none; } 
+ 
 h1{text-align:center;margin:0 0 24px;font-size:25px}label{display:block;margin-bottom:7px;font-weight:bold}
 input{width:100%;padding:14px;border:1px solid #ccc;border-radius:10px;font-size:16px;outline:none}
 button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
@@ -21,6 +27,18 @@ button:disabled{cursor:wait;opacity:.75}.loading{display:none;align-items:center
 </head>
 <body>
 <div class="card">
+
+<!-- THANH TAB TRUY CẬP CÁC TRANG -->
+  <div class="nav-tabs">
+    <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
+    <a href="#" class="nav-tab active">🔍 Phép Năm</a>
+    <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
+    <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">📋 Phụ cấp sữa</a>
+    <a href="https://bhxh.pages.dev" target="_blank" class="nav-tab">🏥 BHXH</a>
+    <a href="https://rasoat.pages.dev" target="_blank" class="nav-tab">🔍 Rà soát</a>
+    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
+  </div>
+ 
 <h1>TRA CỨU PHÉP NĂM 2026</h1>
 <label for="employeeName">Họ và tên</label>
 <input id="employeeName" placeholder="Nhập họ tên có dấu hoặc không dấu" autocomplete="off">
