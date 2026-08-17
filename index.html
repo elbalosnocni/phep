@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tra cứu phép năm 2026</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:24px;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+}
+
+.card{
+  max-width:620px;
+  margin:30px auto;
+  background:white;
+  padding:26px;
+  border-radius:18px;
+  box-shadow:0 5px 24px rgba(0,0,0,.08);
+}
+
+h1{
+  text-align:center;
+  margin:0 0 24px;
+  font-size:25px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.error{
+  margin-top:15px;
+  text-align:center;
+  color:#b91c1c;
+}
+
+.result{
+  display:none;
+  margin-top:22px;
+}
+
+.name{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.factory{
+  margin-top:5px;
+  color:#666;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+.box{
+  padding:18px;
+  background:#f8fafc;
+  border-radius:12px;
+  text-align:center;
+}
+
+.box-title{
+  font-size:14px;
+  color:#555;
+}
+
+.num{
+  margin-top:7px;
+  font-size:28px;
+  font-weight:bold;
+}
+
+.note{
+  margin-top:18px;
+  text-align:center;
+  color:#777;
+  font-size:13px;
+}
+
+@media(max-width:500px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h1>TRA CỨU PHÉP NĂM 2026</h1>
+
+  <label for="employeeName">Họ và tên</label>
+
+  <input
+    id="employeeName"
+    placeholder="Nhập họ tên nhân viên"
+    autocomplete="off"
+  >
+
+  <button onclick="lookup()">TRA CỨU</button>
+
+  <div id="error" class="error"></div>
+
+  <div id="result" class="result">
+
+    <div id="name" class="name"></div>
+    <div id="factory" class="factory"></div>
+
+    <div class="grid">
+
+      <div class="box">
+        <div class="box-title">Phép năm cũ 2025</div>
+        <div id="left2025" class="num">-</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Phép năm 2026</div>
+        <div id="left2026" class="num">-</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Đã sử dụng</div>
+        <div id="paid" class="num">-</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Phép còn lại</div>
+        <div id="remaining" class="num">-</div>
+      </div>
+
+    </div>
+
+    <div id="updated" class="note"></div>
+
+  </div>
+</div>
+
+<script>
+
+const API_URL =
+  "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+async function lookup(){
+
+  const name =
+    document.getElementById('employeeName').value.trim();
+
+  const error =
+    document.getElementById('error');
+
+  const result =
+    document.getElementById('result');
+
+  error.textContent = '';
+  result.style.display = 'none';
+
+  if(!name){
+    error.textContent =
+      'Vui lòng nhập họ tên nhân viên.';
+    return;
+  }
+
+  try{
+
+    const url =
+      API_URL +
+      '?name=' +
+      encodeURIComponent(name);
+
+    const res =
+      await fetch(url);
+
+    const data =
+      await res.json();
+
+    if(!data.ok || !data.employee){
+
+      error.textContent =
+        'Không tìm thấy nhân viên. Vui lòng kiểm tra lại họ tên.';
+
+      return;
+    }
+
+    const x = data.employee;
+
+    document.getElementById('name').textContent =
+      x.employeeName || '';
+
+    document.getElementById('factory').textContent =
+      'Xưởng: ' + (x.factories || '');
+
+    document.getElementById('left2025').textContent =
+      formatNumber(x.left2025);
+
+    document.getElementById('left2026').textContent =
+      formatNumber(x.left2026);
+
+    document.getElementById('paid').textContent =
+      formatNumber(x.paidLeave);
+
+    document.getElementById('remaining').textContent =
+      formatNumber(x.remainingLeave);
+
+    document.getElementById('updated').textContent =
+      'Dữ liệu cập nhật: ' + (x.updatedAt || '');
+
+    result.style.display = 'block';
+
+  }catch(e){
+
+    error.textContent =
+      'Không kết nối được hệ thống. Vui lòng thử lại.';
+
+  }
+}
+
+function formatNumber(value){
+
+  if(value === null || value === undefined || value === ''){
+    return '-';
+  }
+
+  const n = Number(value);
+
+  if(Number.isNaN(n)){
+    return value;
+  }
+
+  return n.toFixed(2).replace(/\.00$/,'');
+}
+
+document
+  .getElementById('employeeName')
+  .addEventListener('keydown', function(e){
+
+    if(e.key === 'Enter'){
+      lookup();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
