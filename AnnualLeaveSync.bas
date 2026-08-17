@@ -35,7 +35,7 @@ Private Const SOURCE_FILE As String = "X:\DS + PN + TP - 2014\Npn2023.xlsb"
 Private Const SOURCE_PASSWORD As String = "2000"
 
 ' Paste your deployed Google Apps Script Web App URL here.
-Private Const WEB_APP_URL As String = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"
+Private Const WEB_APP_URL As String = "https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec"
 
 Private Const FIRST_DATA_ROW As Long = 4
 
