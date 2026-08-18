@@ -1,590 +1,446 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tra cứu phép năm 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-  box-sizing:border-box
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  padding:24px;
-  font-family:Arial,sans-serif;
-  background:#f3f4f6;
+body {
+  margin: 0;
+  padding: 24px 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  min-height: 100vh;
 }
 
-.card{
-  max-width:620px;
-  margin:30px auto;
-  background:#fff;
-  padding:26px;
-  border-radius:18px;
-  box-shadow:0 5px 24px rgba(0,0,0,.08);
+.card {
+  max-width: 580px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
 }
 
-/* =========================
-   NAV TABS
-========================= */
-
-.nav-tabs{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin:20px auto;
+/* NAV TABS */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
 }
 
-.nav-tab{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:12px 22px;
-  border-radius:30px;
-  background:#fff;
-  color:#334155;
-  font-weight:600;
-  text-decoration:none;
-  border:1px solid #e5e7eb;
-  transition:.25s;
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
 
-.nav-tab:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(0,0,0,.12);
-  color:#2563eb;
+.nav-tab:hover {
+  border-color: #cbd5e1;
+  color: #2563eb;
+  background: #fff;
 }
 
-.nav-tab.active{
-  background:linear-gradient(
-    135deg,
-    #2563eb,
-    #1e40af
-  );
-  color:#fff;
-  border:none;
+.nav-tab.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-/* =========================
-   MAIN
-========================= */
-
-h1{
-  text-align:center;
-  margin:0 0 24px;
-  font-size:25px;
+/* TITLE & FORM */
+h1 {
+  text-align: center;
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
 }
 
-label{
-  display:block;
-  margin-bottom:7px;
-  font-weight:bold;
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
 }
 
-input{
-  width:100%;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  font-size:16px;
-  outline:none;
+input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #f8fafc;
 }
 
-input:focus{
-  border-color:#2563eb;
-  box-shadow:0 0 0 3px rgba(37,99,235,.1);
+input:focus {
+  background: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-button{
-  width:100%;
-  padding:14px;
-  margin-top:12px;
-  border:0;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+button#searchBtn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-button:disabled{
-  cursor:wait;
-  opacity:.75;
+button#searchBtn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
-/* =========================
-   LOADING / ERROR
-========================= */
-
-.loading{
-  display:none;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin-top:15px;
-  color:#555;
-  font-size:14px;
+button#searchBtn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.spinner{
-  width:18px;
-  height:18px;
-  border:3px solid #ddd;
-  border-top-color:#555;
-  border-radius:50%;
-  animation:spin .8s linear infinite;
+/* SUPPORT & QR BOX */
+.support-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-@keyframes spin{
-  to{
-    transform:rotate(360deg)
+.btn-zalo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #0068ff;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  transition: background 0.2s;
+}
+
+.btn-zalo:hover {
+  background: #0056d6;
+}
+
+.support-box p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.qr-code {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 4px;
+  background: #fff;
+}
+
+/* LOADING & ERROR */
+.loading {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  margin-top: 14px;
+  text-align: center;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* RESULT SECTION */
+.result {
+  display: none;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.factory {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.box {
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.box-title {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.num {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.remaining-box {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+}
+
+.remaining-box .box-title {
+  color: #166534;
+  font-weight: 600;
+}
+
+.remaining-box .num {
+  color: #15803d;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.detail-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.detail-btn:hover {
+  background: #e2e8f0;
+}
+
+.monthly-detail {
+  display: none;
+  margin-top: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.monthly-title {
+  background: #f8fafc;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.month-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 13px;
+  color: #334155;
+}
+
+.month-row:first-child {
+  border-top: none;
+}
+
+.month-row:hover {
+  background: #f8fafc;
+}
+
+.month-value {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.month-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f0fdf4;
+  border-top: 1.5px solid #bbf7d0;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.note {
+  margin-top: 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+@media(max-width: 500px) {
+  body {
+    padding: 12px 8px;
+  }
+  .card {
+    padding: 20px 16px;
+  }
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .remaining-box {
+    grid-column: 1 / -1;
   }
 }
-
-.error{
-  margin-top:15px;
-  text-align:center;
-  color:#b91c1c;
-}
-
-/* =========================
-   RESULT
-========================= */
-
-.result{
-  display:none;
-  margin-top:22px;
-}
-
-.name{
-  font-size:22px;
-  font-weight:bold;
-}
-
-.factory{
-  margin-top:6px;
-  color:#666;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
-}
-
-.box{
-  padding:18px;
-  background:#f8fafc;
-  border-radius:12px;
-  text-align:center;
-}
-
-.box-title{
-  font-size:14px;
-  color:#555;
-}
-
-.num{
-  margin-top:7px;
-  font-size:28px;
-  font-weight:bold;
-}
-
-/* =========================
-   REMAINING LEAVE
-========================= */
-
-.remaining-box{
-  background:#dcfce7;
-  border:2px solid #22c55e;
-  box-shadow:0 4px 12px rgba(34,197,94,.18);
-}
-
-.remaining-box .box-title{
-  color:#15803d;
-  font-weight:bold;
-}
-
-.remaining-box .num{
-  color:#166534;
-  font-size:32px;
-  font-weight:800;
-}
-
-/* =========================
-   MONTHLY BUTTON
-========================= */
-
-.detail-btn{
-  background:#eff6ff;
-  color:#1d4ed8;
-  border:1px solid #bfdbfe;
-  margin-top:16px;
-  transition:.2s;
-}
-
-.detail-btn:hover{
-  background:#dbeafe;
-  transform:translateY(-1px);
-}
-
-/* =========================
-   MONTHLY TABLE
-========================= */
-
-.monthly-detail{
-  display:none;
-  margin-top:16px;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  overflow:hidden;
-}
-
-.monthly-title{
-  background:#f8fafc;
-  padding:14px;
-  font-weight:bold;
-  text-align:center;
-  color:#334155;
-}
-
-.month-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:11px 16px;
-  border-top:1px solid #f1f5f9;
-  font-size:14px;
-}
-
-.month-row:hover{
-  background:#f8fafc;
-}
-
-.month-value{
-  font-weight:bold;
-  color:#334155;
-}
-
-.month-total{
-  display:flex;
-  justify-content:space-between;
-  padding:14px 16px;
-  background:#f0fdf4;
-  border-top:2px solid #bbf7d0;
-  color:#166534;
-  font-weight:bold;
-}
-
-.note{
-  margin-top:18px;
-  text-align:center;
-  color:#777;
-  font-size:13px;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:500px){
-
-  body{
-    padding:12px;
-  }
-
-  .card{
-    margin:10px auto;
-    padding:18px;
-    border-radius:15px;
-  }
-
-  .grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .remaining-box{
-    grid-column:1 / -1;
-  }
-
-  .nav-tab{
-    padding:10px 14px;
-    font-size:14px;
-  }
-
-}
-
 </style>
-
 </head>
-
 <body>
 
 <div class="card">
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
-<div class="nav-tabs">
-
-  <a
-    href="https://bangchamcong.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    📋 Chấm Công
-  </a>
-
-  <a
-    href="#"
-    class="nav-tab active">
-    📅 Phép Năm
-  </a>
-
-  <a
-    href="https://noiquy.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    📜 Lỗi cơm
-  </a>
-
-  <a
-    href="https://phucap.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    🥛 Phụ cấp sữa
-  </a>
-
-  <a
-    href="https://bhxh.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    🏥 BHXH
-  </a>
-
-  <a
-    href="https://rasoat.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    🔍 Rà soát
-  </a>
-
-  <a
-    href="https://antoan.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    🛡️ An Toàn
-  </a>
-  
-  <a
-    href="https://xnc-immigration.pages.dev"
-    target="_blank"
-    class="nav-tab">
-    🛂 Immigration
-  </a>
-
-</div>
-
-<!-- =========================
-     TITLE
-========================= -->
-
-<h1>TRA CỨU PHÉP NĂM 2026</h1>
-
-<div class="support-box"> 
-  <a href="https://zalo.me/03xxxxxxx" target="_blank" class="btn-zalo">
-    <span>💬</span> Bấm Liên hệ Hỗ Trợ
-  </a>
-  <p style="margin-bottom: 8px;">📱 Quét QR để mở nhanh</p>
-  <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://phep.pages.dev/" alt="QR Code" width="180" height="180">
-</div>
-  
-<label for="employeeName">
-  Họ và tên
-</label>
-
-<input
-  id="employeeName"
-  placeholder="Nhập họ tên có dấu hoặc không dấu"
-  autocomplete="off">
-
-<button
-  id="searchBtn"
-  onclick="lookup()">
-  TRA CỨU
-</button>
-
-<div
-  id="loading"
-  class="loading">
-
-  <span class="spinner"></span>
-
-  <span>
-    Đang tìm kiếm, vui lòng chờ...
-  </span>
-
-</div>
-
-<div
-  id="error"
-  class="error">
-</div>
-
-<!-- =========================
-     RESULT
-========================= -->
-
-<div
-  id="result"
-  class="result">
-
-  <div
-    id="name"
-    class="name">
+  <!-- NAVIGATION -->
+  <div class="nav-tabs">
+    <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
+    <a href="#" class="nav-tab active">📅 Phép Năm</a>
+    <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
+    <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">🥛 Phụ cấp sữa</a>
+    <a href="https://bhxh.pages.dev" target="_blank" class="nav-tab">🏥 BHXH</a>
+    <a href="https://rasoat.pages.dev" target="_blank" class="nav-tab">🔍 Rà soát</a>
+    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
+    <a href="https://xnc-immigration.pages.dev" target="_blank" class="nav-tab">🛂 Immigration</a>
   </div>
 
-  <div
-    id="factory"
-    class="factory">
+  <!-- TITLE -->
+  <h1>TRA CỨU PHÉP NĂM 2026</h1>
+
+  <!-- SUPPORT BOX -->
+  <div class="support-box"> 
+    <a href="https://zalo.me/03xxxxxxx" target="_blank" class="btn-zalo">💬 Bấm Liên hệ Hỗ Trợ</a>
+    <p>📱 Quét QR để mở nhanh</p>
+    <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://phep.pages.dev/" alt="QR Code" width="140" height="140">
+  </div>
+    
+  <!-- FORM INPUT -->
+  <label for="employeeName">Họ và tên</label>
+  <input id="employeeName" placeholder="Nhập họ tên có dấu hoặc không dấu" autocomplete="off">
+  <button id="searchBtn" onclick="lookup()">TRA CỨU</button>
+
+  <div id="loading" class="loading">
+    <span class="spinner"></span>
+    <span>Đang tìm kiếm, vui lòng chờ...</span>
   </div>
 
-  <div class="grid">
+  <div id="error" class="error"></div>
 
-    <div class="box">
+  <!-- RESULT -->
+  <div id="result" class="result">
+    <div id="name" class="name"></div>
+    <div id="factory" class="factory"></div>
 
-      <div class="box-title">
-        Phép năm cũ 2025
+    <div class="grid">
+      <div class="box">
+        <div class="box-title">Phép năm cũ 2025</div>
+        <div id="left2025" class="num">-</div>
       </div>
-
-      <div
-        id="left2025"
-        class="num">
-        -
+      <div class="box">
+        <div class="box-title">Phép năm 2026</div>
+        <div id="left2026" class="num">-</div>
       </div>
-
+      <div class="box">
+        <div class="box-title">Đã sử dụng</div>
+        <div id="paid" class="num">-</div>
+      </div>
+      <div class="box remaining-box">
+        <div class="box-title">✅ PHÉP CÒN LẠI</div>
+        <div id="remaining" class="num">-</div>
+      </div>
     </div>
 
-    <div class="box">
+    <button id="detailBtn" class="detail-btn" onclick="toggleMonthlyDetail()">📅 Xem chi tiết phép đã sử dụng</button>
 
-      <div class="box-title">
-        Phép năm 2026
+    <div id="monthlyDetail" class="monthly-detail">
+      <div class="monthly-title">📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG NĂM 2026</div>
+      <div id="monthlyRows"></div>
+      <div class="month-total">
+        <span>TỔNG ĐÃ SỬ DỤNG</span>
+        <span id="monthlyTotal">0</span>
       </div>
-
-      <div
-        id="left2026"
-        class="num">
-        -
-      </div>
-
     </div>
 
-    <div class="box">
-
-      <div class="box-title">
-        Đã sử dụng
-      </div>
-
-      <div
-        id="paid"
-        class="num">
-        -
-      </div>
-
-    </div>
-
-    <div class="box remaining-box">
-
-      <div class="box-title">
-        ✅ PHÉP CÒN LẠI
-      </div>
-
-      <div
-        id="remaining"
-        class="num">
-        -
-      </div>
-
-    </div>
-
+    <div id="updated" class="note"></div>
   </div>
-
-  <!-- =========================
-       MONTHLY BUTTON
-  ========================= -->
-
-  <button
-    id="detailBtn"
-    class="detail-btn"
-    onclick="toggleMonthlyDetail()">
-
-    📅 Xem chi tiết phép đã sử dụng
-
-  </button>
-
-  <!-- =========================
-       MONTHLY DETAIL
-  ========================= -->
-
-  <div
-    id="monthlyDetail"
-    class="monthly-detail">
-
-    <div class="monthly-title">
-      📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG NĂM 2026
-    </div>
-
-    <div id="monthlyRows">
-    </div>
-
-    <div class="month-total">
-
-      <span>
-        TỔNG ĐÃ SỬ DỤNG
-      </span>
-
-      <span id="monthlyTotal">
-        0
-      </span>
-
-    </div>
-
-  </div>
-
-  <div
-    id="updated"
-    class="note">
-  </div>
-
-</div>
-
 </div>
 
 <script>
-
-/* ============================================================
-   GOOGLE APPS SCRIPT API
-============================================================ */
-
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec";
-
-
-/* ============================================================
-   MONTHS
-============================================================ */
+const API_URL = "https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec";
 
 const MONTHS = [
-
   ["jan","Tháng 1","Jan"],
   ["feb","Tháng 2","Feb"],
   ["mar","Tháng 3","Mar"],
@@ -597,404 +453,144 @@ const MONTHS = [
   ["oct","Tháng 10","Oct"],
   ["nov","Tháng 11","Nov"],
   ["dec","Tháng 12","Dec"]
-
 ];
-
-
-/* ============================================================
-   CURRENT EMPLOYEE
-============================================================ */
 
 let currentEmployee = null;
 
-
-/* ============================================================
-   LOOKUP
-============================================================ */
-
-async function lookup(){
-
-  const name =
-    document
-      .getElementById('employeeName')
-      .value
-      .trim();
-
-  const error =
-    document.getElementById('error');
-
-  const result =
-    document.getElementById('result');
-
-  const loading =
-    document.getElementById('loading');
-
-  const button =
-    document.getElementById('searchBtn');
+async function lookup() {
+  const name = document.getElementById('employeeName').value.trim();
+  const error = document.getElementById('error');
+  const result = document.getElementById('result');
+  const loading = document.getElementById('loading');
+  const button = document.getElementById('searchBtn');
 
   error.textContent = '';
-
   result.style.display = 'none';
+  document.getElementById('monthlyDetail').style.display = 'none';
 
-  /*
-   * Hide monthly detail on every new search
-   */
-  document
-    .getElementById('monthlyDetail')
-    .style.display = 'none';
-
-  if(!name){
-
-    error.textContent =
-      'Vui lòng nhập họ tên nhân viên.';
-
+  if(!name) {
+    error.textContent = 'Vui lòng nhập họ tên nhân viên.';
     return;
   }
 
   loading.style.display = 'flex';
-
   button.disabled = true;
-
   button.textContent = 'ĐANG TÌM...';
 
-  try{
+  try {
+    const res = await fetch(API_URL + '?name=' + encodeURIComponent(name) + '&_=' + Date.now(), {
+      method: 'GET',
+      cache: 'no-store'
+    });
 
-    const res = await fetch(
+    const data = await res.json();
 
-      API_URL +
-      '?name=' +
-      encodeURIComponent(name) +
-      '&_=' +
-      Date.now(),
-
-      {
-        method:'GET',
-        cache:'no-store'
-      }
-
-    );
-
-    const data =
-      await res.json();
-
-    if(
-      !data.ok ||
-      !data.employee
-    ){
-
-      error.textContent =
-        'Không tìm thấy nhân viên. Vui lòng kiểm tra lại họ tên.';
-
+    if(!data.ok || !data.employee) {
+      error.textContent = 'Không tìm thấy nhân viên. Vui lòng kiểm tra lại họ tên.';
       return;
     }
 
-    const x =
-      data.employee;
-
+    const x = data.employee;
     currentEmployee = x;
 
-    /*
-     * Employee
-     */
-    document
-      .getElementById('name')
-      .textContent =
-        x.employeeName || '';
+    document.getElementById('name').textContent = x.employeeName || '';
+    document.getElementById('factory').textContent = 'Xưởng: ' + (x.factories || '');
 
-    document
-      .getElementById('factory')
-      .textContent =
-        'Xưởng: ' +
-        (x.factories || '');
+    document.getElementById('left2025').textContent = format3(x.left2025);
+    document.getElementById('left2026').textContent = format3(x.left2026);
+    document.getElementById('paid').textContent = format3(x.paidLeave);
+    document.getElementById('remaining').textContent = format3(x.remainingLeave);
 
-    /*
-     * Summary
-     */
-    document
-      .getElementById('left2025')
-      .textContent =
-        format3(x.left2025);
+    renderMonthlyLeave(x.monthlyLeave || {});
 
-    document
-      .getElementById('left2026')
-      .textContent =
-        format3(x.left2026);
-
-    document
-      .getElementById('paid')
-      .textContent =
-        format3(x.paidLeave);
-
-    document
-      .getElementById('remaining')
-      .textContent =
-        format3(x.remainingLeave);
-
-    /*
-     * Monthly detail
-     */
-    renderMonthlyLeave(
-      x.monthlyLeave || {}
-    );
-
-    /*
-     * Updated time
-     */
-    document
-      .getElementById('updated')
-      .textContent =
-        'Dữ liệu cập nhật: ' +
-        formatVNDateTime(x.updatedAt);
-
+    document.getElementById('updated').textContent = 'Dữ liệu cập nhật: ' + formatVNDateTime(x.updatedAt);
     result.style.display = 'block';
 
-  }catch(e){
-
+  } catch(e) {
     console.error(e);
-
-    error.textContent =
-      'Không kết nối được hệ thống. Vui lòng thử lại.';
-
-  }finally{
-
+    error.textContent = 'Không kết nối được hệ thống. Vui lòng thử lại.';
+  } finally {
     loading.style.display = 'none';
-
     button.disabled = false;
-
     button.textContent = 'TRA CỨU';
-
   }
-
 }
 
-
-/* ============================================================
-   RENDER MONTHLY LEAVE
-============================================================ */
-
-function renderMonthlyLeave(monthly){
-
-  const container =
-    document.getElementById('monthlyRows');
-
+function renderMonthlyLeave(monthly) {
+  const container = document.getElementById('monthlyRows');
   container.innerHTML = '';
-
   let total = 0;
 
-  MONTHS.forEach(function(item){
+  MONTHS.forEach(function(item) {
+    const key = item[0];
+    const vn = item[1];
+    const en = item[2];
+    const value = Number(monthly[key] || 0);
 
-    const key =
-      item[0];
+    total += Number.isFinite(value) ? value : 0;
 
-    const vn =
-      item[1];
+    const row = document.createElement('div');
+    row.className = 'month-row';
 
-    const en =
-      item[2];
+    const label = document.createElement('span');
+    label.textContent = vn + ' (' + en + ')';
 
-    const value =
-      Number(monthly[key] || 0);
-
-    total +=
-      Number.isFinite(value)
-        ? value
-        : 0;
-
-    const row =
-      document.createElement('div');
-
-    row.className =
-      'month-row';
-
-    const label =
-      document.createElement('span');
-
-    label.textContent =
-      vn + ' (' + en + ')';
-
-    const amount =
-      document.createElement('span');
-
-    amount.className =
-      'month-value';
-
-    amount.textContent =
-      format3(value);
+    const amount = document.createElement('span');
+    amount.className = 'month-value';
+    amount.textContent = format3(value);
 
     row.appendChild(label);
-
     row.appendChild(amount);
-
     container.appendChild(row);
-
   });
 
-  document
-    .getElementById('monthlyTotal')
-    .textContent =
-      format3(total);
-
+  document.getElementById('monthlyTotal').textContent = format3(total);
 }
 
+function toggleMonthlyDetail() {
+  const detail = document.getElementById('monthlyDetail');
+  const button = document.getElementById('detailBtn');
 
-/* ============================================================
-   SHOW / HIDE MONTHLY DETAIL
-============================================================ */
-
-function toggleMonthlyDetail(){
-
-  const detail =
-    document.getElementById('monthlyDetail');
-
-  const button =
-    document.getElementById('detailBtn');
-
-  if(
-    detail.style.display === 'block'
-  ){
-
+  if(detail.style.display === 'block') {
     detail.style.display = 'none';
-
-    button.textContent =
-      '📅 Xem chi tiết phép đã sử dụng';
-
-  }else{
-
+    button.textContent = '📅 Xem chi tiết phép đã sử dụng';
+  } else {
     detail.style.display = 'block';
-
-    button.textContent =
-      '▲ Ẩn chi tiết phép';
-
-    /*
-     * Scroll gently to detail
-     */
-    setTimeout(function(){
-
-      detail.scrollIntoView({
-        behavior:'smooth',
-        block:'nearest'
-      });
-
-    },50);
-
+    button.textContent = '▲ Ẩn chi tiết phép';
+    setTimeout(function() {
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
   }
-
 }
 
-
-/* ============================================================
-   FORMAT NUMBER
-============================================================ */
-
-function format3(value){
-
-  if(
-    value === null ||
-    value === undefined ||
-    value === ''
-  ){
-
-    return '-';
-
-  }
-
-  const n =
-    Number(value);
-
-  if(
-    Number.isNaN(n)
-  ){
-
-    return value;
-
-  }
-
-  return n
-    .toFixed(3)
-    .replace(/\.?0+$/,'');
-
+function format3(value) {
+  if(value === null || value === undefined || value === '') return '-';
+  const n = Number(value);
+  if(Number.isNaN(n)) return value;
+  return n.toFixed(3).replace(/\.?0+$/, '');
 }
 
+function formatVNDateTime(value) {
+  if(!value) return '-';
+  if(/^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2}$/.test(value)) return value;
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return value;
 
-/* ============================================================
-   FORMAT VIETNAM DATETIME
-============================================================ */
-
-function formatVNDateTime(value){
-
-  if(!value){
-
-    return '-';
-
-  }
-
-  if(
-    /^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2}$/
-      .test(value)
-  ){
-
-    return value;
-
-  }
-
-  const d =
-    new Date(value);
-
-  if(
-    isNaN(d.getTime())
-  ){
-
-    return value;
-
-  }
-
-  return new Intl.DateTimeFormat(
-
-    'vi-VN',
-
-    {
-      timeZone:'Asia/Ho_Chi_Minh',
-
-      year:'numeric',
-
-      month:'2-digit',
-
-      day:'2-digit',
-
-      hour:'2-digit',
-
-      minute:'2-digit',
-
-      second:'2-digit',
-
-      hour12:false
-    }
-
-  ).format(d);
-
+  return new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).format(d);
 }
 
-
-/* ============================================================
-   ENTER KEY
-============================================================ */
-
-document
-  .getElementById('employeeName')
-  .addEventListener(
-    'keydown',
-    e => {
-
-      if(e.key === 'Enter'){
-
-        lookup();
-
-      }
-
-    }
-  );
-
+document.getElementById('employeeName').addEventListener('keydown', e => {
+  if(e.key === 'Enter') lookup();
+});
 </script>
-
 </body>
 </html>
