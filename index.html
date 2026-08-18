@@ -1,26 +1,185 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tra cứu phép năm 2026</title>
-<style>
-*{box-sizing:border-box}body{margin:0;padding:24px;font-family:Arial,sans-serif;background:#f3f4f6}
-.card{max-width:620px;margin:30px auto;background:#fff;padding:26px;border-radius:18px;box-shadow:0 5px 24px rgba(0,0,0,.08)}
 
-.nav-tabs { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 20px auto; }
-.nav-tab { display: flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 30px; background: #fff; color: #334155; font-weight: 600; text-decoration: none; border: 1px solid #e5e7eb; transition: .25s; }
-.nav-tab:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.12); color: #2563eb; }
-.nav-tab.active { background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; border: none; } 
- 
-h1{text-align:center;margin:0 0 24px;font-size:25px}label{display:block;margin-bottom:7px;font-weight:bold}
-input{width:100%;padding:14px;border:1px solid #ccc;border-radius:10px;font-size:16px;outline:none}
-button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
-button:disabled{cursor:wait;opacity:.75}.loading{display:none;align-items:center;justify-content:center;gap:10px;margin-top:15px;color:#555;font-size:14px}
-.spinner{width:18px;height:18px;border:3px solid #ddd;border-top-color:#555;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}.error{margin-top:15px;text-align:center;color:#b91c1c}
-.result{display:none;margin-top:22px}.name{font-size:22px;font-weight:bold}.factory{margin-top:6px;color:#666}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+<title>Tra cứu phép năm 2026</title>
+
+<style>
+
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  padding:24px;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+}
+
+.card{
+  max-width:620px;
+  margin:30px auto;
+  background:#fff;
+  padding:26px;
+  border-radius:18px;
+  box-shadow:0 5px 24px rgba(0,0,0,.08);
+}
+
+/* =========================
+   NAV TABS
+========================= */
+
+.nav-tabs{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:20px auto;
+}
+
+.nav-tab{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 22px;
+  border-radius:30px;
+  background:#fff;
+  color:#334155;
+  font-weight:600;
+  text-decoration:none;
+  border:1px solid #e5e7eb;
+  transition:.25s;
+}
+
+.nav-tab:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+  color:#2563eb;
+}
+
+.nav-tab.active{
+  background:linear-gradient(
+    135deg,
+    #2563eb,
+    #1e40af
+  );
+  color:#fff;
+  border:none;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+h1{
+  text-align:center;
+  margin:0 0 24px;
+  font-size:25px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  cursor:wait;
+  opacity:.75;
+}
+
+/* =========================
+   LOADING / ERROR
+========================= */
+
+.loading{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+  color:#555;
+  font-size:14px;
+}
+
+.spinner{
+  width:18px;
+  height:18px;
+  border:3px solid #ddd;
+  border-top-color:#555;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg)
+  }
+}
+
+.error{
+  margin-top:15px;
+  text-align:center;
+  color:#b91c1c;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result{
+  display:none;
+  margin-top:22px;
+}
+
+.name{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.factory{
+  margin-top:6px;
+  color:#666;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
 
 .box{
   padding:18px;
@@ -40,7 +199,10 @@ button:disabled{cursor:wait;opacity:.75}.loading{display:none;align-items:center
   font-weight:bold;
 }
 
-/* NỔI BẬT PHÉP CÒN LẠI */
+/* =========================
+   REMAINING LEAVE
+========================= */
+
 .remaining-box{
   background:#dcfce7;
   border:2px solid #22c55e;
@@ -58,13 +220,94 @@ button:disabled{cursor:wait;opacity:.75}.loading{display:none;align-items:center
   font-weight:800;
 }
 
+/* =========================
+   MONTHLY BUTTON
+========================= */
+
+.detail-btn{
+  background:#eff6ff;
+  color:#1d4ed8;
+  border:1px solid #bfdbfe;
+  margin-top:16px;
+  transition:.2s;
+}
+
+.detail-btn:hover{
+  background:#dbeafe;
+  transform:translateY(-1px);
+}
+
+/* =========================
+   MONTHLY TABLE
+========================= */
+
+.monthly-detail{
+  display:none;
+  margin-top:16px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.monthly-title{
+  background:#f8fafc;
+  padding:14px;
+  font-weight:bold;
+  text-align:center;
+  color:#334155;
+}
+
+.month-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 16px;
+  border-top:1px solid #f1f5f9;
+  font-size:14px;
+}
+
+.month-row:hover{
+  background:#f8fafc;
+}
+
+.month-value{
+  font-weight:bold;
+  color:#334155;
+}
+
+.month-total{
+  display:flex;
+  justify-content:space-between;
+  padding:14px 16px;
+  background:#f0fdf4;
+  border-top:2px solid #bbf7d0;
+  color:#166534;
+  font-weight:bold;
+}
+
 .note{
   margin-top:18px;
   text-align:center;
   color:#777;
   font-size:13px;
 }
- @media(max-width:500px){
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+  body{
+    padding:12px;
+  }
+
+  .card{
+    margin:10px auto;
+    padding:18px;
+    border-radius:15px;
+  }
+
   .grid{
     grid-template-columns:1fr 1fr;
   }
@@ -72,77 +315,671 @@ button:disabled{cursor:wait;opacity:.75}.loading{display:none;align-items:center
   .remaining-box{
     grid-column:1 / -1;
   }
+
+  .nav-tab{
+    padding:10px 14px;
+    font-size:14px;
+  }
+
 }
+
 </style>
+
 </head>
+
 <body>
+
 <div class="card">
 
-<!-- THANH TAB TRUY CẬP CÁC TRANG -->
-  <div class="nav-tabs">
-    <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
-    <a href="#" class="nav-tab active">🔍 Phép Năm</a>
-    <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
-    <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">📋 Phụ cấp sữa</a>
-    <a href="https://bhxh.pages.dev" target="_blank" class="nav-tab">🏥 BHXH</a>
-    <a href="https://rasoat.pages.dev" target="_blank" class="nav-tab">🔍 Rà soát</a>
-    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
-  </div>
- 
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<div class="nav-tabs">
+
+  <a
+    href="https://bangchamcong.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    📋 Chấm Công
+  </a>
+
+  <a
+    href="#"
+    class="nav-tab active">
+    🔍 Phép Năm
+  </a>
+
+  <a
+    href="https://noiquy.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    📜 Lỗi cơm
+  </a>
+
+  <a
+    href="https://phucap.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    📋 Phụ cấp sữa
+  </a>
+
+  <a
+    href="https://bhxh.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    🏥 BHXH
+  </a>
+
+  <a
+    href="https://rasoat.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    🔍 Rà soát
+  </a>
+
+  <a
+    href="https://antoan.pages.dev"
+    target="_blank"
+    class="nav-tab">
+    🛡️ An Toàn
+  </a>
+
+</div>
+
+<!-- =========================
+     TITLE
+========================= -->
+
 <h1>TRA CỨU PHÉP NĂM 2026</h1>
-<label for="employeeName">Họ và tên</label>
-<input id="employeeName" placeholder="Nhập họ tên có dấu hoặc không dấu" autocomplete="off">
-<button id="searchBtn" onclick="lookup()">TRA CỨU</button>
-<div id="loading" class="loading"><span class="spinner"></span><span>Đang tìm kiếm, vui lòng chờ...</span></div>
-<div id="error" class="error"></div>
-<div id="result" class="result">
-<div id="name" class="name"></div><div id="factory" class="factory"></div>
-<div class="grid">
-<div class="box"><div class="box-title">Phép năm cũ 2025</div><div id="left2025" class="num">-</div></div>
-<div class="box"><div class="box-title">Phép năm 2026</div><div id="left2026" class="num">-</div></div>
-<div class="box"><div class="box-title">Đã sử dụng</div><div id="paid" class="num">-</div></div>
-<div class="box remaining-box">
-  <div class="box-title">✅ PHÉP CÒN LẠI</div>
-  <div id="remaining" class="num">-</div>
+
+<label for="employeeName">
+  Họ và tên
+</label>
+
+<input
+  id="employeeName"
+  placeholder="Nhập họ tên có dấu hoặc không dấu"
+  autocomplete="off">
+
+<button
+  id="searchBtn"
+  onclick="lookup()">
+  TRA CỨU
+</button>
+
+<div
+  id="loading"
+  class="loading">
+
+  <span class="spinner"></span>
+
+  <span>
+    Đang tìm kiếm, vui lòng chờ...
+  </span>
+
 </div>
+
+<div
+  id="error"
+  class="error">
 </div>
-<div id="updated" class="note"></div>
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<div
+  id="result"
+  class="result">
+
+  <div
+    id="name"
+    class="name">
+  </div>
+
+  <div
+    id="factory"
+    class="factory">
+  </div>
+
+  <div class="grid">
+
+    <div class="box">
+
+      <div class="box-title">
+        Phép năm cũ 2025
+      </div>
+
+      <div
+        id="left2025"
+        class="num">
+        -
+      </div>
+
+    </div>
+
+    <div class="box">
+
+      <div class="box-title">
+        Phép năm 2026
+      </div>
+
+      <div
+        id="left2026"
+        class="num">
+        -
+      </div>
+
+    </div>
+
+    <div class="box">
+
+      <div class="box-title">
+        Đã sử dụng
+      </div>
+
+      <div
+        id="paid"
+        class="num">
+        -
+      </div>
+
+    </div>
+
+    <div class="box remaining-box">
+
+      <div class="box-title">
+        ✅ PHÉP CÒN LẠI
+      </div>
+
+      <div
+        id="remaining"
+        class="num">
+        -
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+       MONTHLY BUTTON
+  ========================= -->
+
+  <button
+    id="detailBtn"
+    class="detail-btn"
+    onclick="toggleMonthlyDetail()">
+
+    📅 Xem chi tiết phép đã sử dụng
+
+  </button>
+
+  <!-- =========================
+       MONTHLY DETAIL
+  ========================= -->
+
+  <div
+    id="monthlyDetail"
+    class="monthly-detail">
+
+    <div class="monthly-title">
+      📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG NĂM 2026
+    </div>
+
+    <div id="monthlyRows">
+    </div>
+
+    <div class="month-total">
+
+      <span>
+        TỔNG ĐÃ SỬ DỤNG
+      </span>
+
+      <span id="monthlyTotal">
+        0
+      </span>
+
+    </div>
+
+  </div>
+
+  <div
+    id="updated"
+    class="note">
+  </div>
+
 </div>
+
 </div>
+
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec";
+
+/* ============================================================
+   GOOGLE APPS SCRIPT API
+============================================================ */
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec";
+
+
+/* ============================================================
+   MONTHS
+============================================================ */
+
+const MONTHS = [
+
+  ["jan","Tháng 1","Jan"],
+  ["feb","Tháng 2","Feb"],
+  ["mar","Tháng 3","Mar"],
+  ["apr","Tháng 4","Apr"],
+  ["may","Tháng 5","May"],
+  ["jun","Tháng 6","Jun"],
+  ["jul","Tháng 7","Jul"],
+  ["aug","Tháng 8","Aug"],
+  ["sep","Tháng 9","Sep"],
+  ["oct","Tháng 10","Oct"],
+  ["nov","Tháng 11","Nov"],
+  ["dec","Tháng 12","Dec"]
+
+];
+
+
+/* ============================================================
+   CURRENT EMPLOYEE
+============================================================ */
+
+let currentEmployee = null;
+
+
+/* ============================================================
+   LOOKUP
+============================================================ */
+
 async function lookup(){
- const name=document.getElementById('employeeName').value.trim(),error=document.getElementById('error'),result=document.getElementById('result'),loading=document.getElementById('loading'),button=document.getElementById('searchBtn');
- error.textContent='';result.style.display='none';
- if(!name){error.textContent='Vui lòng nhập họ tên nhân viên.';return}
- loading.style.display='flex';button.disabled=true;button.textContent='ĐANG TÌM...';
- try{
-  const res=await fetch(API_URL+'?name='+encodeURIComponent(name)+'&_='+Date.now(),{method:'GET',cache:'no-store'}),data=await res.json();
-  if(!data.ok||!data.employee){error.textContent='Không tìm thấy nhân viên. Vui lòng kiểm tra lại họ tên.';return}
-  const x=data.employee;
-  document.getElementById('name').textContent=x.employeeName||'';
-  document.getElementById('factory').textContent='Xưởng: '+(x.factories||'');
-  document.getElementById('left2025').textContent=format3(x.left2025);
-  document.getElementById('left2026').textContent=format3(x.left2026);
-  document.getElementById('paid').textContent=format3(x.paidLeave);
-  document.getElementById('remaining').textContent=format3(x.remainingLeave);
-  document.getElementById('updated').textContent='Dữ liệu cập nhật: '+formatVNDateTime(x.updatedAt);
-  result.style.display='block';
- }catch(e){error.textContent='Không kết nối được hệ thống. Vui lòng thử lại.'}
- finally{loading.style.display='none';button.disabled=false;button.textContent='TRA CỨU'}
+
+  const name =
+    document
+      .getElementById('employeeName')
+      .value
+      .trim();
+
+  const error =
+    document.getElementById('error');
+
+  const result =
+    document.getElementById('result');
+
+  const loading =
+    document.getElementById('loading');
+
+  const button =
+    document.getElementById('searchBtn');
+
+  error.textContent = '';
+
+  result.style.display = 'none';
+
+  /*
+   * Hide monthly detail on every new search
+   */
+  document
+    .getElementById('monthlyDetail')
+    .style.display = 'none';
+
+  if(!name){
+
+    error.textContent =
+      'Vui lòng nhập họ tên nhân viên.';
+
+    return;
+  }
+
+  loading.style.display = 'flex';
+
+  button.disabled = true;
+
+  button.textContent = 'ĐANG TÌM...';
+
+  try{
+
+    const res = await fetch(
+
+      API_URL +
+      '?name=' +
+      encodeURIComponent(name) +
+      '&_=' +
+      Date.now(),
+
+      {
+        method:'GET',
+        cache:'no-store'
+      }
+
+    );
+
+    const data =
+      await res.json();
+
+    if(
+      !data.ok ||
+      !data.employee
+    ){
+
+      error.textContent =
+        'Không tìm thấy nhân viên. Vui lòng kiểm tra lại họ tên.';
+
+      return;
+    }
+
+    const x =
+      data.employee;
+
+    currentEmployee = x;
+
+    /*
+     * Employee
+     */
+    document
+      .getElementById('name')
+      .textContent =
+        x.employeeName || '';
+
+    document
+      .getElementById('factory')
+      .textContent =
+        'Xưởng: ' +
+        (x.factories || '');
+
+    /*
+     * Summary
+     */
+    document
+      .getElementById('left2025')
+      .textContent =
+        format3(x.left2025);
+
+    document
+      .getElementById('left2026')
+      .textContent =
+        format3(x.left2026);
+
+    document
+      .getElementById('paid')
+      .textContent =
+        format3(x.paidLeave);
+
+    document
+      .getElementById('remaining')
+      .textContent =
+        format3(x.remainingLeave);
+
+    /*
+     * Monthly detail
+     */
+    renderMonthlyLeave(
+      x.monthlyLeave || {}
+    );
+
+    /*
+     * Updated time
+     */
+    document
+      .getElementById('updated')
+      .textContent =
+        'Dữ liệu cập nhật: ' +
+        formatVNDateTime(x.updatedAt);
+
+    result.style.display = 'block';
+
+  }catch(e){
+
+    console.error(e);
+
+    error.textContent =
+      'Không kết nối được hệ thống. Vui lòng thử lại.';
+
+  }finally{
+
+    loading.style.display = 'none';
+
+    button.disabled = false;
+
+    button.textContent = 'TRA CỨU';
+
+  }
+
 }
+
+
+/* ============================================================
+   RENDER MONTHLY LEAVE
+============================================================ */
+
+function renderMonthlyLeave(monthly){
+
+  const container =
+    document.getElementById('monthlyRows');
+
+  container.innerHTML = '';
+
+  let total = 0;
+
+  MONTHS.forEach(function(item){
+
+    const key =
+      item[0];
+
+    const vn =
+      item[1];
+
+    const en =
+      item[2];
+
+    const value =
+      Number(monthly[key] || 0);
+
+    total +=
+      Number.isFinite(value)
+        ? value
+        : 0;
+
+    const row =
+      document.createElement('div');
+
+    row.className =
+      'month-row';
+
+    const label =
+      document.createElement('span');
+
+    label.textContent =
+      vn + ' (' + en + ')';
+
+    const amount =
+      document.createElement('span');
+
+    amount.className =
+      'month-value';
+
+    amount.textContent =
+      format3(value);
+
+    row.appendChild(label);
+
+    row.appendChild(amount);
+
+    container.appendChild(row);
+
+  });
+
+  document
+    .getElementById('monthlyTotal')
+    .textContent =
+      format3(total);
+
+}
+
+
+/* ============================================================
+   SHOW / HIDE MONTHLY DETAIL
+============================================================ */
+
+function toggleMonthlyDetail(){
+
+  const detail =
+    document.getElementById('monthlyDetail');
+
+  const button =
+    document.getElementById('detailBtn');
+
+  if(
+    detail.style.display === 'block'
+  ){
+
+    detail.style.display = 'none';
+
+    button.textContent =
+      '📅 Xem chi tiết phép đã sử dụng';
+
+  }else{
+
+    detail.style.display = 'block';
+
+    button.textContent =
+      '▲ Ẩn chi tiết phép';
+
+    /*
+     * Scroll gently to detail
+     */
+    setTimeout(function(){
+
+      detail.scrollIntoView({
+        behavior:'smooth',
+        block:'nearest'
+      });
+
+    },50);
+
+  }
+
+}
+
+
+/* ============================================================
+   FORMAT NUMBER
+============================================================ */
+
 function format3(value){
- if(value===null||value===undefined||value==='')return '-';
- const n=Number(value);if(Number.isNaN(n))return value;
- return n.toFixed(3).replace(/\.?0+$/,'');
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '-';
+
+  }
+
+  const n =
+    Number(value);
+
+  if(
+    Number.isNaN(n)
+  ){
+
+    return value;
+
+  }
+
+  return n
+    .toFixed(3)
+    .replace(/\.?0+$/,'');
+
 }
+
+
+/* ============================================================
+   FORMAT VIETNAM DATETIME
+============================================================ */
+
 function formatVNDateTime(value){
- if(!value)return '-';
- if(/^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2}$/.test(value))return value;
- const d=new Date(value);if(isNaN(d.getTime()))return value;
- return new Intl.DateTimeFormat('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d);
+
+  if(!value){
+
+    return '-';
+
+  }
+
+  if(
+    /^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2}$/
+      .test(value)
+  ){
+
+    return value;
+
+  }
+
+  const d =
+    new Date(value);
+
+  if(
+    isNaN(d.getTime())
+  ){
+
+    return value;
+
+  }
+
+  return new Intl.DateTimeFormat(
+
+    'vi-VN',
+
+    {
+      timeZone:'Asia/Ho_Chi_Minh',
+
+      year:'numeric',
+
+      month:'2-digit',
+
+      day:'2-digit',
+
+      hour:'2-digit',
+
+      minute:'2-digit',
+
+      second:'2-digit',
+
+      hour12:false
+    }
+
+  ).format(d);
+
 }
-document.getElementById('employeeName').addEventListener('keydown',e=>{if(e.key==='Enter')lookup()});
+
+
+/* ============================================================
+   ENTER KEY
+============================================================ */
+
+document
+  .getElementById('employeeName')
+  .addEventListener(
+    'keydown',
+    e => {
+
+      if(e.key === 'Enter'){
+
+        lookup();
+
+      }
+
+    }
+  );
+
 </script>
+
 </body>
 </html>
