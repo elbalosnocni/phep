@@ -3,8 +3,8 @@ Option Explicit
 ' ============================================================
 ' ANNUAL LEAVE SYNC - FINAL
 ' 2 FACTORIES:
-'   Sheet 2026    -> XƯỞNG BÁNH
-'   Sheet 2026 PL -> XƯỞNG IN
+'   Sheet 2026    -> XUONG BANH
+'   Sheet 2026 PL -> XUONG IN
 '
 ' SOURCE:
 '   X:\DS + PN + TP - 2014\Npn2023.xlsb
@@ -12,7 +12,7 @@ Option Explicit
 '   2000
 '
 ' COLUMNS:
-'   A  = HỌ VÀ TÊN
+'   A  = HO VA TEN
 '   Y  = Paid          -> SUM all monthly rows
 '   Z  = Left 2025     -> first numeric value
 '   AA = Left 2026     -> first numeric value
@@ -104,8 +104,8 @@ Public Sub SyncAnnualLeaveToGoogle()
             "Cannot find sheet: " & sheet1
     End If
 
-    Application.StatusBar = "Reading " & sheet1 & " -> XƯỞNG BÁNH..."
-    ReadFactorySheet ws, dict, "XƯỞNG BÁNH"
+    Application.StatusBar = "Reading " & sheet1 & " -> XUONG BANH..."
+    ReadFactorySheet ws, dict, "XUONG BANH"
 
     Set ws = Nothing
     On Error Resume Next
@@ -117,8 +117,8 @@ Public Sub SyncAnnualLeaveToGoogle()
             "Cannot find sheet: " & sheet2
     End If
 
-    Application.StatusBar = "Reading " & sheet2 & " -> XƯỞNG IN..."
-    ReadFactorySheet ws, dict, "XƯỞNG IN"
+    Application.StatusBar = "Reading " & sheet2 & " -> XUONG IN..."
+    ReadFactorySheet ws, dict, "XUONG IN"
 
     employeeCount = dict.Count
 
@@ -145,12 +145,12 @@ Public Sub SyncAnnualLeaveToGoogle()
     Application.EnableEvents = True
 
     MsgBox _
-        "ĐỒNG BỘ THÀNH CÔNG" & vbCrLf & vbCrLf & _
+        "DONG BO THANH CONG" & vbCrLf & vbCrLf & _
         "Sheets: " & sheet1 & " + " & sheet2 & vbCrLf & _
-        "Nhân viên: " & employeeCount & vbCrLf & _
-        "Xưởng: Bánh / In" & vbCrLf & _
-        "Số liệu: 3 chữ số thập phân" & vbCrLf & _
-        "Cập nhật (VN): " & updated & vbCrLf & _
+        "Nhan vien: " & employeeCount & vbCrLf & _
+        "Xuong: Banh / In" & vbCrLf & _
+        "So lieu: 3 chu so thap phan" & vbCrLf & _
+        "Cap nhat (VN): " & updated & vbCrLf & _
         "HTTP: " & httpStatus, _
         vbInformation, _
         "Annual Leave Sync"
@@ -173,7 +173,7 @@ EH:
     Application.EnableEvents = True
 
     MsgBox _
-        "ĐỒNG BỘ THẤT BẠI" & vbCrLf & vbCrLf & _
+        "DONG BO THAT BAI" & vbCrLf & vbCrLf & _
         "Error " & errNumber & vbCrLf & _
         errDescription & vbCrLf & vbCrLf & _
         IIf(Len(responseText) > 0, _
@@ -196,7 +196,7 @@ Public Sub TestGoogleConnection()
     Application.StatusBar = False
 
     MsgBox _
-        "KẾT NỐI GOOGLE THÀNH CÔNG" & vbCrLf & vbCrLf & _
+        "KET NOI GOOGLE THANH CONG" & vbCrLf & vbCrLf & _
         "HTTP: " & httpStatus & vbCrLf & vbCrLf & _
         responseText, _
         vbInformation, _
@@ -208,7 +208,7 @@ EH:
     Application.StatusBar = False
 
     MsgBox _
-        "KẾT NỐI GOOGLE THẤT BẠI" & vbCrLf & vbCrLf & _
+        "KET NOI GOOGLE THAT BAI" & vbCrLf & vbCrLf & _
         "Error " & Err.Number & vbCrLf & _
         Err.Description, _
         vbCritical, _
@@ -429,7 +429,7 @@ Private Function GetOpenWorkbookByFullName(ByVal fullName As String) As Workbook
     Dim wb As Workbook
 
     For Each wb In Application.Workbooks
-        If StrComp(wb.FullName, fullName, vbTextCompare) = 0 Then
+        If StrComp(wb.fullName, fullName, vbTextCompare) = 0 Then
             Set GetOpenWorkbookByFullName = wb
             Exit Function
         End If
@@ -462,7 +462,7 @@ Private Sub PostJson( _
     http.Send body
 
     httpStatus = http.Status
-    responseText = http.ResponseText
+    responseText = http.responseText
 
     If httpStatus < 200 Or httpStatus >= 300 Then
         Err.Raise vbObjectError + 300, , _
@@ -492,7 +492,7 @@ Private Sub GetGoogle( _
     http.Send
 
     httpStatus = http.Status
-    responseText = http.ResponseText
+    responseText = http.responseText
 
     If httpStatus < 200 Or httpStatus >= 300 Then
         Err.Raise vbObjectError + 400, , _
