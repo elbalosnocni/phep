@@ -501,6 +501,8 @@ async function lookup() {
     document.getElementById('paid').textContent = format3(x.paidLeave);
     document.getElementById('remaining').textContent = format3(x.remainingLeave);
 
+    // Đảm bảo x tồn tại để tránh lỗi "Cannot read properties of undefined"
+if (x) {
     // 1. Render dữ liệu nghỉ phép (bảo vệ bằng object rỗng nếu null/undefined)
     renderMonthlyLeave(x.monthlyLeave || {});
 
@@ -514,7 +516,8 @@ async function lookup() {
     // 3. Hiển thị khối kết quả
     if (result) {
         result.style.display = 'block';
-
+    }
+}
   } catch(e) {
     console.error(e);
     error.textContent = 'Không kết nối được hệ thống. Vui lòng thử lại.';
