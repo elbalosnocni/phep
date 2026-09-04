@@ -501,10 +501,19 @@ async function lookup() {
     document.getElementById('paid').textContent = format3(x.paidLeave);
     document.getElementById('remaining').textContent = format3(x.remainingLeave);
 
+    // 1. Render dữ liệu nghỉ phép (bảo vệ bằng object rỗng nếu null/undefined)
     renderMonthlyLeave(x.monthlyLeave || {});
 
-    document.getElementById('updated').textContent = 'Dữ liệu cập nhật: ' + formatVNDateTime(x.updatedAt);
-    result.style.display = 'block';
+    // 2. Cập nhật thời gian hiển thị (bảo vệ phần tử DOM tránh lỗi Null)
+    const updatedElement = document.getElementById('updated');
+    if (updatedElement) {
+        // Gọi hàm formatVNDateTime đã được tối ưu sắp xếp lại chuỗi (ở câu trả lời trước)
+        updatedElement.textContent = 'Dữ liệu cập nhật: ' + formatVNDateTime(x.updatedAt);
+    }
+
+    // 3. Hiển thị khối kết quả
+    if (result) {
+        result.style.display = 'block';
 
   } catch(e) {
     console.error(e);
@@ -571,12 +580,27 @@ function format3(value) {
 }
 
 function formatVNDateTime(value) {
-  if(!value) return '-';
-  if(/^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2}$/.test(value)) return value;
-  const d = new Date(value);
-  if(isNaN(d.getTime())) return value;
+  if (!value) return '-';
 
-  return new Intl.DateTimeFormat('vi-VN', {
+  // 1. Chuyển đổi an toàn về đối tượng Date
+  let d = new Date(value);
+
+  // Nếu chuỗi truyền vào có dạng "DD/MM/YYYY HH:mm:ss", Date() của JS sẽ không hiểu được 
+  // và trả về NaN. Chúng ta cần chuyển nó về chuẩn "YYYY-MM-DDTHH:mm:ss" để xử lý.
+  if (isNaN(d.getTime()) && typeof value === 'string') {
+    const parts = value.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/);
+    if (parts) {
+      // parts: [chuỗi_gốc, ngày, tháng, năm, giờ, phút, giây]
+      // Đổi lại cấu trúc chuẩn để ép kiểu Date: Năm-Tháng-Ngày Giờ:Phút:Giây
+      d = new Date(`${parts[3]}-${parts[2]}-${parts[1]}T${parts[4]}:${parts[5]}:${parts[6]}`);
+    }
+  }
+
+  // Nếu vẫn không thể định dạng được thì trả về giá trị gốc
+  if (isNaN(d.getTime())) return value;
+
+  // 2. Sử dụng Intl.DateTimeFormat để lấy chính xác các thành phần theo múi giờ VN
+  const formatter = new Intl.DateTimeFormat('vi-VN', {
     timeZone: 'Asia/Ho_Chi_Minh',
     year: 'numeric',
     month: '2-digit',
@@ -585,8 +609,19 @@ function formatVNDateTime(value) {
     minute: '2-digit',
     second: '2-digit',
     hour12: false
-  }).format(d);
+  });
+
+  // Biến mảng các thành phần thời gian thành một Object để dễ tái cấu trúc
+  const parts = formatter.formatToParts(d).reduce((acc, part) => {
+    acc[part.type] = part.value;
+    return acc;
+  }, {});
+
+  // 3. Tự sắp xếp lại chuỗi theo đúng định dạng hiển thị: Giờ:Phút:Giây Ngày/Tháng/Năm
+  // Kết quả ra màn hình chắc chắn sẽ là: "12:00:24 04/09/2026"
+  return `${parts.hour}:${parts.minute}:${parts.second} ${parts.day}/${parts.month}/${parts.year}`;
 }
+
 
 document.getElementById('employeeName').addEventListener('keydown', e => {
   if(e.key === 'Enter') lookup();
