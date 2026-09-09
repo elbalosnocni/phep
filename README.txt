@@ -1,45 +1,44 @@
-ANNUAL LEAVE LOOKUP v4
-=======================
+ANNUAL LEAVE - FIX DSCNV
 
-Mục tiêu:
-- Công nhân tra cứu bằng CCCD 12 số, kể cả số 0 ở đầu.
-- Dữ liệu phép vẫn lấy từ Npn2023.xlsb, sheet 2026 và 2026 PL.
-- Thông tin Phòng ban/Bộ phận/CCCD lấy từ DSCNV-2023.xlsb, sheet DSCNV, dò theo tên.
-- LeaveData được mở rộng từ A:S thành A:V.
+1. VBA source:
+   \\192.168.0.253\vn hr\DS + PN + TP - 2014\DSCNV-23.xlsb
+   Password: DSCNV
+   Sheet: DSCNV
 
-Cột DSCNV:
-- H = CCCD
-- 31 = AE = Phòng ban
-- 32 = AF = Bộ phận
+2. DSCNV columns:
+   H  = Citizen ID / CCCD
+   AE = Department / Phòng ban
+   AF = Section / Bộ phận
 
-Nguồn:
-\\192.168.0.253\vn hr\DS + PN + TP - 2014\Npn2023.xlsb
-\\192.168.0.253\vn hr\DS + PN + TP - 2014\DSCNV-2023.xlsb [DSCNV]
+3. Matching:
+   Match by employee name after normalizing spaces, case and Vietnamese accents.
+   The EmployeeName displayed/sent to Google is preserved exactly from Npn2023,
+   so it is NOT converted to lowercase.
 
-Cài đặt:
-1. Thay toàn bộ code Apps Script bằng AnnualLeave.gs.
-2. Deploy Web App, lấy URL /exec. Nếu URL thay đổi, cập nhật API_URL trong index.html và WEB_APP_URL trong AnnualLeaveSync.bas.
-3. Thay module VBA AnnualLeaveSync.bas.
-4. Run macro SyncAnnualLeaveToGoogle.
-5. Upload index.html lên GitHub Pages/Cloudflare Pages.
-6. RunAnnualLeaveSync.vbs vẫn gọi workbook AnnualLeaveSync.xlsm như hiện tại.
+6. IMPORTANT:
+   The name column in DSCNV is assumed to be column A, same as Npn2023.
+   If the employee name in DSCNV is in another column, change COL_NAME accordingly
+   or create a separate COL_EMPLOYEE_NAME_MASTER constant.
 
-LƯU Ý CCCD:
-- VBA đọc c.Text trước để giữ định dạng hiển thị 12 số.
-- Nếu ô là số, VBA dùng format 000000000000 để khôi phục số 0 đầu.
-- Khuyến nghị cột H trong DSCNV được đặt định dạng Text hoặc 000000000000.
-- Nếu Excel đã lưu CCCD dạng số và đã làm mất số 0 đầu, code chỉ có thể khôi phục đúng khi biết CCCD luôn đủ 12 số.
+4. DSCNV NAME COLUMN:
+   Họ tên trong DSCNV-23.xlsb nằm ở cột B. Code đã dùng riêng COL_MASTER_NAME = 2.
 
-Kiến trúc:
-DSCNV-2023.xlsb --(dò tên)--> CCCD + Phòng ban + Bộ phận
-Npn2023.xlsb  --(tên)---------> Phép + Xưởng + tháng
-                                  |
-                                  v
-                             Google Sheet
-                               LeaveData
-                                  |
-                                  v
-                         Google Apps Script
-                                  |
-                                  v
-                         phepnam.pages.dev
+7. CCCD:
+   The VBA reads .Text first and formats numeric values as 12 digits.
+   If Excel has already lost a leading zero and has no formatting information,
+   the missing zero cannot be known with certainty; best is to keep H as Text
+   or custom format 000000000000.
+
+6. GAS:
+   LeaveData becomes A:V:
+   A EmployeeName
+   B PaidLeave
+   C Left2025
+   D Left2026
+   E RemainingLeave
+   F Factories
+   G Department
+   H Section
+   I CitizenID
+   J UpdatedAt
+   K:V Jan-Dec
