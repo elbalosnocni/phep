@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tra cứu phép năm 2026</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px 12px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+.card{max-width:600px;margin:10px auto;background:#fff;padding:28px 24px;border-radius:20px;box-shadow:0 10px 25px -5px rgba(0,0,0,.06)}
+.nav-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.nav-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:99px;background:#f8fafc;color:#475569;font-size:12px;font-weight:600;text-decoration:none;border:1px solid #e2e8f0}
+.nav-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
+h1{text-align:center;margin:0 0 22px;font-size:22px;color:#0f172a}
+.support-box{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;padding:16px;text-align:center;margin-bottom:22px}
+.btn-zalo{display:inline-flex;background:#0068ff;color:#fff;text-decoration:none;padding:8px 15px;border-radius:8px;font-size:13px;font-weight:600}
+.support-box p{margin:10px 0 8px;font-size:12px;color:#64748b}
+.qr-code{border-radius:8px;border:1px solid #e2e8f0;padding:4px;background:#fff}
+label{display:block;margin-bottom:8px;font-weight:700;font-size:14px;color:#334155}
+input{width:100%;padding:14px 16px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:18px;letter-spacing:1.5px;outline:none;background:#f8fafc}
+input:focus{background:#fff;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.hint{margin-top:7px;font-size:12px;color:#64748b}
+button#searchBtn{width:100%;padding:14px;margin-top:14px;border:0;border-radius:10px;font-size:15px;font-weight:700;background:#2563eb;color:#fff;cursor:pointer}
+button#searchBtn:disabled{background:#94a3b8;cursor:not-allowed}
+.loading{display:none;align-items:center;justify-content:center;gap:10px;margin-top:15px;color:#64748b;font-size:14px}
+.spinner{width:18px;height:18px;border:2px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{margin-top:14px;text-align:center;color:#dc2626;font-size:14px;font-weight:600}
+.result{display:none;margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0}
+.name{font-size:20px;font-weight:800;color:#0f172a}
+.meta{margin-top:5px;color:#475569;font-size:14px;line-height:1.6}
+.meta strong{color:#334155}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.box{padding:14px;background:#f8fafc;border:1px solid #f1f5f9;border-radius:12px;text-align:center}
+.box-title{font-size:12px;color:#64748b;font-weight:600}
+.num{margin-top:4px;font-size:22px;font-weight:800;color:#1e293b}
+.remaining-box{background:#f0fdf4;border:1.5px solid #86efac;grid-column:1/-1}
+.remaining-box .box-title{color:#166534}
+.remaining-box .num{color:#15803d;font-size:28px}
+.detail-btn{width:100%;padding:12px;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;border-radius:10px;margin-top:16px;font-size:14px;font-weight:700;cursor:pointer}
+.monthly-detail{display:none;margin-top:16px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}
+.monthly-title{background:#f8fafc;padding:12px;font-weight:700;font-size:13px;text-align:center;color:#475569}
+.month-row{display:flex;justify-content:space-between;padding:10px 16px;border-top:1px solid #f1f5f9;font-size:13px}
+.month-value{font-weight:700}
+.month-total{display:flex;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border-top:1.5px solid #bbf7d0;color:#166534;font-weight:800}
+.note{margin-top:16px;text-align:center;color:#94a3b8;font-size:12px}
+@media(max-width:500px){.card{padding:20px 16px}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav-tabs">
+    <a href="https://thongbao-lww.pages.dev" target="_blank" class="nav-tab">📢 Thông báo</a>
+    <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
+    <a href="#" class="nav-tab active">📅 Phép Năm</a>
+    <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
+    <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">🥛 Phụ cấp sữa</a>
+    <a href="https://noikhambenh.pages.dev" target="_blank" class="nav-tab">🏥 BHXH</a>
+    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
+    <a href="https://xnc-immigration.pages.dev" target="_blank" class="nav-tab">🛂 Immigration</a>
+  </div>
+
+  <h1>TRA CỨU PHÉP NĂM 2026</h1>
+
+  <div class="support-box">
+    <a href="https://zalo.me/3933191910227963298" target="_blank" class="btn-zalo">💬 Bấm Liên hệ Hỗ Trợ</a>
+    <p>📱 Quét QR để mở nhanh</p>
+    <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://phepnam.pages.dev/" alt="QR Code" width="140" height="140">
+  </div>
+
+  <label for="citizenId">Số căn cước công dân</label>
+  <input id="citizenId" type="text" inputmode="numeric" autocomplete="off"
+         maxlength="12" placeholder="Nhập đủ 12 số căn cước">
+  <div class="hint">Số 0 ở đầu vẫn được giữ nguyên.</div>
+
+  <button id="searchBtn" onclick="lookup()">TRA CỨU</button>
+
+  <div id="loading" class="loading"><span class="spinner"></span><span>Đang tìm kiếm, vui lòng chờ...</span></div>
+  <div id="error" class="error"></div>
+
+  <div id="result" class="result">
+    <div id="name" class="name"></div>
+    <div id="factory" class="meta"></div>
+    <div id="department" class="meta"></div>
+    <div id="section" class="meta"></div>
+
+    <div class="grid">
+      <div class="box"><div class="box-title">Phép năm cũ 2025</div><div id="left2025" class="num">-</div></div>
+      <div class="box"><div class="box-title">Phép năm 2026</div><div id="left2026" class="num">-</div></div>
+      <div class="box"><div class="box-title">Đã sử dụng</div><div id="paid" class="num">-</div></div>
+      <div class="box remaining-box"><div class="box-title">✅ PHÉP CÒN LẠI</div><div id="remaining" class="num">-</div></div>
+    </div>
+
+    <button id="detailBtn" class="detail-btn" onclick="toggleMonthlyDetail()">📅 Xem chi tiết phép đã sử dụng</button>
+
+    <div id="monthlyDetail" class="monthly-detail">
+      <div class="monthly-title">📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG NĂM 2026</div>
+      <div id="monthlyRows"></div>
+      <div class="month-total"><span>TỔNG ĐÃ SỬ DỤNG</span><span id="monthlyTotal">0</span></div>
+    </div>
+    <div id="updated" class="note"></div>
+  </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxUSCx1x8scN0Xq-3ec-KcDop9bb-AZy8iH9TJyDWgPhmMYr14smVac2MB0GD2L1TRkQw/exec";
+
+const MONTHS = [
+  ["jan","Tháng 1","Jan"],["feb","Tháng 2","Feb"],["mar","Tháng 3","Mar"],
+  ["apr","Tháng 4","Apr"],["may","Tháng 5","May"],["jun","Tháng 6","Jun"],
+  ["jul","Tháng 7","Jul"],["aug","Tháng 8","Aug"],["sep","Tháng 9","Sep"],
+  ["oct","Tháng 10","Oct"],["nov","Tháng 11","Nov"],["dec","Tháng 12","Dec"]
+];
+
+async function lookup(){
+  const input = document.getElementById('citizenId');
+  const citizenId = input.value.replace(/\D/g,'').trim();
+  const error = document.getElementById('error');
+  const result = document.getElementById('result');
+  const loading = document.getElementById('loading');
+  const button = document.getElementById('searchBtn');
+
+  input.value = citizenId;
+  error.textContent = '';
+  result.style.display = 'none';
+  document.getElementById('monthlyDetail').style.display = 'none';
+
+  if(!/^\d{12}$/.test(citizenId)){
+    error.textContent = 'Vui lòng nhập đúng 12 số căn cước.';
+    input.focus();
+    return;
+  }
+
+  loading.style.display = 'flex';
+  button.disabled = true;
+  button.textContent = 'ĐANG TÌM...';
+
+  try{
+    const url = API_URL + '?cccd=' + encodeURIComponent(citizenId) + '&_=' + Date.now();
+    const res = await fetch(url,{method:'GET',cache:'no-store'});
+    const data = await res.json();
+
+    if(!data.ok || !data.employee){
+      error.textContent = data.error || 'Không tìm thấy nhân viên.';
+      return;
+    }
+
+    const x = data.employee;
+    document.getElementById('name').textContent = x.employeeName || '';
+    document.getElementById('factory').innerHTML = '<strong>Xưởng:</strong> ' + escapeHtml(x.factories || '-');
+    document.getElementById('department').innerHTML = '<strong>Phòng ban:</strong> ' + escapeHtml(x.department || '-');
+    document.getElementById('section').innerHTML = '<strong>Bộ phận:</strong> ' + escapeHtml(x.section || '-');
+
+    document.getElementById('left2025').textContent = format3(x.left2025);
+    document.getElementById('left2026').textContent = format3(x.left2026);
+    document.getElementById('paid').textContent = format3(x.paidLeave);
+    document.getElementById('remaining').textContent = format3(x.remainingLeave);
+
+    renderMonthlyLeave(x.monthlyLeave || {});
+    document.getElementById('updated').textContent = 'Dữ liệu cập nhật: ' + (x.updatedAt || '-');
+    result.style.display = 'block';
+  }catch(e){
+    console.error(e);
+    error.textContent = 'Không kết nối được hệ thống. Vui lòng thử lại.';
+  }finally{
+    loading.style.display = 'none';
+    button.disabled = false;
+    button.textContent = 'TRA CỨU';
+  }
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
+  });
+}
+
+function renderMonthlyLeave(monthly){
+  const container = document.getElementById('monthlyRows');
+  container.innerHTML = '';
+  let total = 0;
+
+  MONTHS.forEach(function(item){
+    const value = Number(monthly[item[0]] || 0);
+    total += Number.isFinite(value) ? value : 0;
+
+    const row = document.createElement('div');
+    row.className = 'month-row';
+    row.innerHTML = '<span>' + item[1] + ' (' + item[2] + ')</span><span class="month-value">' + format3(value) + '</span>';
+    container.appendChild(row);
+  });
+
+  document.getElementById('monthlyTotal').textContent = format3(total);
+}
+
+function toggleMonthlyDetail(){
+  const detail = document.getElementById('monthlyDetail');
+  const button = document.getElementById('detailBtn');
+
+  if(detail.style.display === 'block'){
+    detail.style.display = 'none';
+    button.textContent = '📅 Xem chi tiết phép đã sử dụng';
+  }else{
+    detail.style.display = 'block';
+    button.textContent = '▲ Ẩn chi tiết phép';
+    setTimeout(()=>detail.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  }
+}
+
+function format3(value){
+  if(value === null || value === undefined || value === '') return '-';
+  const n = Number(value);
+  if(Number.isNaN(n)) return value;
+  return n.toFixed(3).replace(/\.?0+$/,'');
+}
+
+document.getElementById('citizenId').addEventListener('input',function(){
+  this.value = this.value.replace(/\D/g,'').slice(0,12);
+});
+document.getElementById('citizenId').addEventListener('keydown',function(e){
+  if(e.key === 'Enter') lookup();
+});
+</script>
+</body>
+</html>
