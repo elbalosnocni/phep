@@ -19,9 +19,9 @@ Private Const COL_PAID As Long = 25       ' Y
 Private Const COL_LEFT_2025 As Long = 26  ' Z
 Private Const COL_LEFT_2026 As Long = 27  ' AA
 Private Const COL_GROSS As Long = 30      ' AD
-Private Const COL_CITIZEN_ID As Long = 8  ' H
-Private Const COL_DEPARTMENT As Long = 31 ' AE
-Private Const COL_SECTION As Long = 32    ' AF
+Private Const COL_CITIZEN_ID As Long = 8  ' H - CCCD
+Private Const COL_DEPARTMENT As Long = 32 ' AF - Phòng ban
+Private Const COL_SECTION As Long = 33    ' AG - Bộ phận
 Private Const COL_MASTER_NAME As Long = 2 ' B - Họ tên trong DSCNV
 
 ' ============================================================
@@ -139,7 +139,7 @@ Public Sub SyncAnnualLeaveToGoogle()
 
     ' --------------------------------------------------------
     ' READ EMPLOYEE MASTER: DSCNV-23.xlsb / DSCNV
-    ' B = EmployeeName, H = Citizen ID, AE = Department, AF = Section
+    ' B = EmployeeName, H = Citizen ID, AF = Department, AG = Section
     ' Match by normalized employee name, but keep original display name.
     ' --------------------------------------------------------
     Set masterDict = CreateObject("Scripting.Dictionary")

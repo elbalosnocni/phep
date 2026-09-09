@@ -104,6 +104,7 @@ function setupSheet() {
   sh.getRange('B:E').setNumberFormat('0.000');
   sh.getRange('K:V').setNumberFormat('0.000');
   sh.getRange('I:I').setNumberFormat('@');
+  sh.getRange('J:J').setNumberFormat('dd/MM/yyyy HH:mm:ss');
 
   // ==========================================================
   // QUAN TRỌNG:

@@ -7,8 +7,8 @@ ANNUAL LEAVE - FIX DSCNV
 
 2. DSCNV columns:
    H  = Citizen ID / CCCD
-   AE = Department / Phòng ban
-   AF = Section / Bộ phận
+   AF = Department / Phòng ban
+   AG = Section / Bộ phận
 
 3. Matching:
    Match by employee name after normalizing spaces, case and Vietnamese accents.
@@ -42,3 +42,8 @@ ANNUAL LEAVE - FIX DSCNV
    I CitizenID
    J UpdatedAt
    K:V Jan-Dec
+
+7. Định dạng Google Sheet:
+   - I = CitizenID: Plain text (@), để giữ số 0 đầu.
+   - J = UpdatedAt: dd/MM/yyyy HH:mm:ss.
+   - K:V = Jan-Dec dạng số 0.000.
