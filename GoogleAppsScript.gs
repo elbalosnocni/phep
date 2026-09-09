@@ -1,33 +1,37 @@
 /**
+ * ============================================================
  * GOOGLE APPS SCRIPT - ANNUAL LEAVE
+ * ============================================================
  *
- * VERSION 2.0
- * Added monthly leave Jan-Dec.
+ * Sheet: LeaveData
  *
- * LeaveData:
+ * A  EmployeeName
+ * B  PaidLeave
+ * C  Left2025
+ * D  Left2026
+ * E  RemainingLeave
+ * F  Factories
+ * G  UpdatedAt
+ * H  Jan
+ * I  Feb
+ * J  Mar
+ * K  Apr
+ * L  May
+ * M  Jun
+ * N  Jul
+ * O  Aug
+ * P  Sep
+ * Q  Oct
+ * R  Nov
+ * S  Dec
  *
- * A EmployeeName
- * B PaidLeave
- * C Left2025
- * D Left2026
- * E RemainingLeave
- * F Factories
- * G UpdatedAt
- * H Jan
- * I Feb
- * J Mar
- * K Apr
- * L May
- * M Jun
- * N Jul
- * O Aug
- * P Sep
- * Q Oct
- * R Nov
- * S Dec
+ * Timezone:
+ * Asia/Ho_Chi_Minh
+ * ============================================================
  */
 
 const SHEET_NAME = 'LeaveData';
+const TIMEZONE = 'Asia/Ho_Chi_Minh';
 
 const MONTHS = [
   'jan',
@@ -44,12 +48,18 @@ const MONTHS = [
   'dec'
 ];
 
+
 /**
- * Create / reset LeaveData
+ * ============================================================
+ * SETUP SHEET
+ * ============================================================
  */
 function setupSheet() {
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Luôn dùng giờ Việt Nam
+  ss.setSpreadsheetTimeZone(TIMEZONE);
 
   let sh = ss.getSheetByName(SHEET_NAME);
 
@@ -59,6 +69,7 @@ function setupSheet() {
 
   sh.clear();
 
+  // Header A:S
   sh.getRange(1, 1, 1, 19).setValues([[
     'EmployeeName',
     'PaidLeave',
@@ -83,150 +94,221 @@ function setupSheet() {
 
   sh.setFrozenRows(1);
 
+  // Format số
+  sh.getRange('B:E').setNumberFormat('0.000');
+  sh.getRange('H:S').setNumberFormat('0.000');
+
+  // ==========================================================
+  // QUAN TRỌNG:
+  // Cột G phải là DATE thật, KHÔNG phải TEXT
+  // ==========================================================
+  sh.getRange('G:G')
+    .setNumberFormat('dd/MM/yyyy HH:mm:ss');
 }
 
+
 /**
- * POST from VBA
+ * ============================================================
+ * POST
+ * VBA -> Google Apps Script -> Google Sheet
+ * ============================================================
  */
 function doPost(e) {
 
   try {
 
-    if (!e ||
-        !e.postData ||
-        !e.postData.contents) {
+    // --------------------------------------------------------
+    // Kiểm tra request
+    // --------------------------------------------------------
+    if (!e || !e.postData || !e.postData.contents) {
 
       return jsonResponse({
         ok: false,
         error: 'Empty request'
       });
-
     }
 
-    const body =
-      JSON.parse(e.postData.contents);
 
-    const employees =
-      body.employees || [];
+    // --------------------------------------------------------
+    // Parse JSON
+    // --------------------------------------------------------
+    const body = JSON.parse(e.postData.contents);
 
-    const updatedAt =
-      body.updatedAt || '';
+    const employees = body.employees || [];
 
-    const ss =
-      SpreadsheetApp.getActiveSpreadsheet();
+    const updatedAt = body.updatedAt || '';
 
-    let sh =
-      ss.getSheetByName(SHEET_NAME);
 
-    if (!sh) {
+    // --------------------------------------------------------
+    // Spreadsheet
+    // --------------------------------------------------------
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    ss.setSpreadsheetTimeZone(TIMEZONE);
+
+    let sheet = ss.getSheetByName(SHEET_NAME);
+
+    if (!sheet) {
 
       setupSheet();
 
-      sh =
-        ss.getSheetByName(SHEET_NAME);
+      sheet = ss.getSheetByName(SHEET_NAME);
     }
 
-    /*
-     * Clear old data.
-     * Keep header.
-     */
-    if (sh.getLastRow() > 1) {
 
-      sh.getRange(
-        2,
-        1,
-        sh.getLastRow() - 1,
-        19
-      ).clearContent();
+    // --------------------------------------------------------
+    // Xóa dữ liệu cũ
+    // --------------------------------------------------------
+    if (sheet.getLastRow() > 1) {
 
+      sheet
+        .getRange(
+          2,
+          1,
+          sheet.getLastRow() - 1,
+          19
+        )
+        .clearContent();
     }
 
-    /*
-     * Build rows
-     */
+
+    // --------------------------------------------------------
+    // UPDATED AT
+    //
+    // VBA gửi:
+    //
+    // dd/mm/yyyy HH:mm:ss
+    //
+    // Ví dụ:
+    // 04/09/2026 12:00:24
+    //
+    // Không dùng:
+    // new Date("04/09/2026 12:00:24")
+    //
+    // vì JavaScript có thể hiểu sai dd/mm.
+    // --------------------------------------------------------
+    const updatedDate = parseVietnamDateTime(updatedAt);
+
+
+    // --------------------------------------------------------
+    // Tạo data
+    // --------------------------------------------------------
     if (employees.length > 0) {
 
-      const values =
-        employees.map(x => [
+      const values = employees.map(function (x) {
 
+        return [
+
+          // A
           x.employeeName || '',
 
+          // B
           round3(x.paidLeave),
 
+          // C
           round3(x.left2025),
 
+          // D
           round3(x.left2026),
 
+          // E
           round3(x.remainingLeave),
 
+          // F
           normalizeFactory(x.factories),
 
-          updatedAt,
+          // G
+          // QUAN TRỌNG:
+          // Date object thật
+          updatedDate,
 
+          // H:S
           round3(x.jan),
-
           round3(x.feb),
-
           round3(x.mar),
-
           round3(x.apr),
-
           round3(x.may),
-
           round3(x.jun),
-
           round3(x.jul),
-
           round3(x.aug),
-
           round3(x.sep),
-
           round3(x.oct),
-
           round3(x.nov),
-
           round3(x.dec)
+        ];
 
-        ]);
+      });
 
-      sh.getRange(
-        2,
-        1,
-        values.length,
-        19
-      ).setValues(values);
 
-      /*
-       * Number format
-       *
-       * B:E  = summary
-       * H:S  = monthly
-       */
-      sh.getRange(
-        2,
-        2,
-        values.length,
-        4
-      ).setNumberFormat('0.000');
+      // ------------------------------------------------------
+      // Ghi dữ liệu
+      // ------------------------------------------------------
+      sheet
+        .getRange(
+          2,
+          1,
+          values.length,
+          19
+        )
+        .setValues(values);
 
-      sh.getRange(
-        2,
-        8,
-        values.length,
-        12
-      ).setNumberFormat('0.000');
+
+      // ------------------------------------------------------
+      // Format B:E
+      // ------------------------------------------------------
+      sheet
+        .getRange(
+          2,
+          2,
+          values.length,
+          4
+        )
+        .setNumberFormat('0.000');
+
+
+      // ------------------------------------------------------
+      // Format H:S
+      // ------------------------------------------------------
+      sheet
+        .getRange(
+          2,
+          8,
+          values.length,
+          12
+        )
+        .setNumberFormat('0.000');
+
+
+      // ------------------------------------------------------
+      // FORMAT G - UPDATEDAT
+      //
+      // Đây là phần quan trọng nhất.
+      // ------------------------------------------------------
+      sheet
+        .getRange(
+          2,
+          7,
+          values.length,
+          1
+        )
+        .setNumberFormat('dd/MM/yyyy HH:mm:ss');
 
     }
 
+
+    // --------------------------------------------------------
+    // Response
+    // --------------------------------------------------------
     return jsonResponse({
 
       ok: true,
 
       rows: employees.length,
 
-      updatedAt: updatedAt
+      updatedAt: formatVietnamDateTime(updatedDate)
 
     });
+
 
   } catch (err) {
 
@@ -242,8 +324,12 @@ function doPost(e) {
 
 }
 
+
 /**
- * GET employee
+ * ============================================================
+ * GET
+ * Tra cứu nhân viên
+ * ============================================================
  */
 function doGet(e) {
 
@@ -255,9 +341,10 @@ function doGet(e) {
         e.parameter.name) || '')
         .trim();
 
-    /*
-     * Health check
-     */
+
+    // --------------------------------------------------------
+    // Health check
+    // --------------------------------------------------------
     if (!name) {
 
       return jsonResponse({
@@ -266,17 +353,22 @@ function doGet(e) {
 
         service: 'Annual Leave Lookup',
 
-        version: '2.0'
+        version: '3.0'
 
       });
 
     }
 
+
+    // --------------------------------------------------------
+    // Spreadsheet
+    // --------------------------------------------------------
     const ss =
       SpreadsheetApp.getActiveSpreadsheet();
 
     const sh =
       ss.getSheetByName(SHEET_NAME);
+
 
     if (!sh) {
 
@@ -290,15 +382,21 @@ function doGet(e) {
 
     }
 
+
+    // --------------------------------------------------------
+    // Get data
+    // --------------------------------------------------------
     const values =
       sh.getDataRange().getValues();
+
 
     const query =
       normalizeVietnamese(name);
 
-    /*
-     * Exact normalized match
-     */
+
+    // --------------------------------------------------------
+    // Exact match
+    // --------------------------------------------------------
     for (
       let i = 1;
       i < values.length;
@@ -306,7 +404,9 @@ function doGet(e) {
     ) {
 
       const dbName =
-        String(values[i][0] || '').trim();
+        String(values[i][0] || '')
+          .trim();
+
 
       if (
         normalizeVietnamese(dbName)
@@ -321,9 +421,10 @@ function doGet(e) {
 
     }
 
-    /*
-     * Partial match
-     */
+
+    // --------------------------------------------------------
+    // Partial match
+    // --------------------------------------------------------
     for (
       let i = 1;
       i < values.length;
@@ -331,10 +432,13 @@ function doGet(e) {
     ) {
 
       const dbName =
-        String(values[i][0] || '').trim();
+        String(values[i][0] || '')
+          .trim();
+
 
       const normalizedDbName =
         normalizeVietnamese(dbName);
+
 
       if (
         query &&
@@ -349,6 +453,10 @@ function doGet(e) {
 
     }
 
+
+    // --------------------------------------------------------
+    // Not found
+    // --------------------------------------------------------
     return jsonResponse({
 
       ok: false,
@@ -356,6 +464,7 @@ function doGet(e) {
       error: 'Employee not found'
 
     });
+
 
   } catch (err) {
 
@@ -371,15 +480,11 @@ function doGet(e) {
 
 }
 
+
 /**
- * Build employee response
- *
- * Sheet:
- * A = 0
- * B = 1
- * ...
- * G = 6
- * H:S = 7:18
+ * ============================================================
+ * BUILD EMPLOYEE RESPONSE
+ * ============================================================
  */
 function buildEmployeeResponse(row) {
 
@@ -397,21 +502,22 @@ function buildEmployeeResponse(row) {
 
     factories: normalizeFactory(row[5]),
 
-    updatedAt: row[6],
+    // G = UpdatedAt
+    updatedAt: formatVietnamDateTime(row[6]),
 
     monthlyLeave: {}
 
   };
 
-  /*
-   * H:S
-   */
-  MONTHS.forEach(function(month, index) {
+
+  // Jan-Dec
+  MONTHS.forEach(function (month, index) {
 
     employee.monthlyLeave[month] =
       round3(row[7 + index]);
 
   });
+
 
   return jsonResponse({
 
@@ -423,8 +529,222 @@ function buildEmployeeResponse(row) {
 
 }
 
+
 /**
- * Remove Vietnamese accents
+ * ============================================================
+ * PARSE NGÀY GIỜ VIỆT NAM
+ * ============================================================
+ *
+ * Input từ VBA:
+ *
+ * 04/09/2026 12:00:24
+ *
+ * Output:
+ *
+ * JavaScript Date object
+ *
+ * ============================================================
+ */
+function parseVietnamDateTime(value) {
+
+  // Không có dữ liệu
+  if (
+    value === null ||
+    value === undefined ||
+    value === ''
+  ) {
+
+    return '';
+
+  }
+
+
+  // ----------------------------------------------------------
+  // Nếu đã là Date
+  // ----------------------------------------------------------
+  if (
+    Object.prototype.toString.call(value)
+      === '[object Date]'
+  ) {
+
+    if (!isNaN(value.getTime())) {
+
+      return value;
+
+    }
+
+  }
+
+
+  const s =
+    String(value).trim();
+
+
+  // ----------------------------------------------------------
+  // VBA:
+  //
+  // dd/mm/yyyy HH:mm:ss
+  //
+  // Ví dụ:
+  // 04/09/2026 12:00:24
+  // ----------------------------------------------------------
+  const match =
+    s.match(
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/
+    );
+
+
+  if (!match) {
+
+    throw new Error(
+      'Invalid UpdatedAt: ' + s
+    );
+
+  }
+
+
+  const day =
+    Number(match[1]);
+
+  const month =
+    Number(match[2]);
+
+  const year =
+    Number(match[3]);
+
+  const hour =
+    Number(match[4]);
+
+  const minute =
+    Number(match[5]);
+
+  const second =
+    Number(match[6]);
+
+
+  // ----------------------------------------------------------
+  // Validate
+  // ----------------------------------------------------------
+  if (
+    month < 1 ||
+    month > 12 ||
+
+    day < 1 ||
+    day > 31 ||
+
+    hour < 0 ||
+    hour > 23 ||
+
+    minute < 0 ||
+    minute > 59 ||
+
+    second < 0 ||
+    second > 59
+  ) {
+
+    throw new Error(
+      'Invalid UpdatedAt value: ' + s
+    );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // Date thật
+  //
+  // Không parse bằng new Date(string)
+  // ----------------------------------------------------------
+  return new Date(
+    year,
+    month - 1,
+    day,
+    hour,
+    minute,
+    second
+  );
+
+}
+
+
+/**
+ * ============================================================
+ * FORMAT DATE
+ * ============================================================
+ *
+ * Output:
+ *
+ * HH:mm:ss dd/MM/yyyy
+ *
+ * Ví dụ:
+ *
+ * 12:00:24 04/09/2026
+ * ============================================================
+ */
+function formatVietnamDateTime(value) {
+
+  if (!value) {
+
+    return '';
+
+  }
+
+
+  // Nếu là Date thật
+  if (
+    Object.prototype.toString.call(value)
+      === '[object Date]' &&
+    !isNaN(value.getTime())
+  ) {
+
+    return Utilities.formatDate(
+      value,
+      TIMEZONE,
+      'HH:mm:ss dd/MM/yyyy'
+    );
+
+  }
+
+
+  // Nếu chẳng may là string
+  const s =
+    String(value).trim();
+
+
+  // dd/MM/yyyy HH:mm:ss
+  const match =
+    s.match(
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/
+    );
+
+
+  if (match) {
+
+    return (
+      match[4].padStart(2, '0') +
+      ':' +
+      match[5] +
+      ':' +
+      match[6] +
+      ' ' +
+      match[1].padStart(2, '0') +
+      '/' +
+      match[2].padStart(2, '0') +
+      '/' +
+      match[3]
+    );
+
+  }
+
+
+  return s;
+
+}
+
+
+/**
+ * ============================================================
+ * NORMALIZE VIETNAMESE
+ * ============================================================
  */
 function normalizeVietnamese(value) {
 
@@ -432,7 +752,10 @@ function normalizeVietnamese(value) {
 
     .normalize('NFD')
 
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(
+      /[\u0300-\u036f]/g,
+      ''
+    )
 
     .replace(/đ/g, 'd')
 
@@ -446,13 +769,17 @@ function normalizeVietnamese(value) {
 
 }
 
+
 /**
- * Normalize factory
+ * ============================================================
+ * NORMALIZE FACTORY
+ * ============================================================
  */
 function normalizeFactory(value) {
 
   const s =
     String(value || '').trim();
+
 
   if (
     s === '2026' ||
@@ -463,6 +790,7 @@ function normalizeFactory(value) {
 
   }
 
+
   if (
     s === '2026 PL' ||
     s === 'XƯỞNG IN'
@@ -471,6 +799,7 @@ function normalizeFactory(value) {
     return 'In';
 
   }
+
 
   if (
     s.toUpperCase().includes('BÁNH') &&
@@ -481,20 +810,33 @@ function normalizeFactory(value) {
 
   }
 
+
   return s
 
-    .replace(/XƯỞNG/gi, '')
+    .replace(
+      /XƯỞNG/gi,
+      ''
+    )
 
-    .replace(/\b2026\s+PL\b/gi, 'In')
+    .replace(
+      /\b2026\s+PL\b/gi,
+      'In'
+    )
 
-    .replace(/\b2026\b/gi, 'Bánh')
+    .replace(
+      /\b2026\b/gi,
+      'Bánh'
+    )
 
     .trim();
 
 }
 
+
 /**
- * Round 3 decimals
+ * ============================================================
+ * ROUND 3
+ * ============================================================
  */
 function round3(value) {
 
@@ -508,8 +850,10 @@ function round3(value) {
 
   }
 
+
   const n =
     Number(value);
+
 
   if (Number.isNaN(n)) {
 
@@ -517,14 +861,18 @@ function round3(value) {
 
   }
 
+
   return Math.round(
     (n + Number.EPSILON) * 1000
   ) / 1000;
 
 }
 
+
 /**
- * JSON response
+ * ============================================================
+ * JSON RESPONSE
+ * ============================================================
  */
 function jsonResponse(obj) {
 
