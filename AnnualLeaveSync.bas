@@ -9,7 +9,7 @@ Private Const LEAVE_SOURCE_PASSWORD As String = "2000"
 
 ' Nguon 2: thong tin nhan vien
 Private Const EMPLOYEE_SOURCE_FILE As String = "\\192.168.0.253\vn hr\DS + PN + TP - 2014\DSCNV-2023.xlsb"
-Private Const EMPLOYEE_SOURCE_PASSWORD As String = ""
+Private Const EMPLOYEE_SOURCE_PASSWORD As String = "DSCNV"
 
 Private Const EMPLOYEE_SHEET As String = "DSCNV"
 
