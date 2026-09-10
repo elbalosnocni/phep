@@ -68,12 +68,12 @@ button#searchBtn:disabled{background:#94a3b8;cursor:not-allowed}
     <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://phepnam.pages.dev/" alt="QR Code" width="140" height="140">
   </div>
 
-  <label for="citizenId">Số Căn Cước</label>
+  <label for="citizenId">Nhập Số Căn Cước để tra cứu</label>
   <input id="citizenId" type="text" inputmode="numeric" autocomplete="off"
          maxlength="12" placeholder="Nhập đủ 12 số căn cước">
-  <a href="https://hrm.dnd.vn/lwlogin" target="_blank" class="btn-zalo">📝 Bấm để Đăng ký phép</a>
-
+  
   <button id="searchBtn" onclick="lookup()">TRA CỨU</button>
+  <a href="https://hrm.dnd.vn/lwlogin" target="_blank" class="btn-zalo">📝 Đăng ký phép</a>
 
   <div id="loading" class="loading"><span class="spinner"></span><span>Đang tìm kiếm, vui lòng chờ...</span></div>
   <div id="error" class="error"></div>
