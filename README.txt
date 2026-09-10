@@ -2,7 +2,6 @@ ANNUAL LEAVE - FIX DSCNV
 
 1. VBA source:
    \\192.168.0.253\vn hr\DS + PN + TP - 2014\DSCNV-23.xlsb
-   Password: DSCNV
    Sheet: DSCNV
 
 2. DSCNV columns:
