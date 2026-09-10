@@ -94,7 +94,7 @@ button#searchBtn:disabled{background:#94a3b8;cursor:not-allowed}
     <button id="detailBtn" class="detail-btn" onclick="toggleMonthlyDetail()">📅 Xem chi tiết phép đã sử dụng</button>
 
     <div id="monthlyDetail" class="monthly-detail">
-      <div class="monthly-title">📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG NĂM 2026</div>
+      <div class="monthly-title">📅 CHI TIẾT PHÉP ĐÃ SỬ DỤNG</div>
       <div id="monthlyRows"></div>
       <div class="month-total"><span>TỔNG ĐÃ SỬ DỤNG</span><span id="monthlyTotal">0</span></div>
     </div>
@@ -147,7 +147,6 @@ async function lookup(){
 
     const x = data.employee;
     document.getElementById('name').textContent = x.employeeName || '';
-    document.getElementById('factory').innerHTML = '<strong>Xưởng:</strong> ' + escapeHtml(x.factories || '-');
     document.getElementById('department').innerHTML = '<strong>Phòng ban:</strong> ' + escapeHtml(x.department || '-');
     document.getElementById('section').innerHTML = '<strong>Bộ phận:</strong> ' + escapeHtml(x.section || '-');
 
