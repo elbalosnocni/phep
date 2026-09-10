@@ -29,10 +29,6 @@ File:
 
 X:\DS + PN + TP - 2014\Npn2023.xlsb
 
-Mật khẩu mở file:
-
-2000
-
 Hai sheet cần lấy dữ liệu:
 
 - 2026
