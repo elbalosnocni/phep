@@ -14,6 +14,7 @@ ANNUAL LEAVE - AUTO DAILY v3
 4. Chay Test_RunAnnualLeaveSync.bat de test.
 
 5. Sau khi test thanh cong, tao Windows Task Scheduler chay RunAnnualLeaveSync.vbs moi ngay, de xuat 06:00.
+//nologo "\\192.168.0.253\vn hr\DS + PN + TP - 2014\RunAnnualLeaveSync.vbs"
 
 6. LUU Y: neu X: la network drive, Task Scheduler co the khong thay X:. Khi do dung UNC path thay cho X: trong VBS. Mo Properties cua o X: de xem Network path.
 
