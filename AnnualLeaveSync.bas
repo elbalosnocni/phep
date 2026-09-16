@@ -21,8 +21,8 @@ Private Const COL_LEFT_2026 As Long = 27  ' AA
 Private Const COL_GROSS As Long = 30      ' AD
 Private Const COL_CITIZEN_ID As Long = 8  ' H - CCCD
 Private Const COL_DEPARTMENT As Long = 32 ' AF - Phòng ban
-Private Const COL_SECTION As Long = 33    ' AG - Bộ phận
-Private Const COL_MASTER_NAME As Long = 2 ' B - Họ tên trong DSCNV
+Private Const COL_SECTION As Long = 33    ' AG - B? ph?n
+Private Const COL_MASTER_NAME As Long = 2 ' B - H? tên trong DSCNV
 
 ' ============================================================
 ' MAIN SYNC
@@ -145,7 +145,7 @@ Public Sub SyncAnnualLeaveToGoogle()
     Set masterDict = CreateObject("Scripting.Dictionary")
     masterDict.CompareMode = vbTextCompare
 
-    Application.StatusBar = "Reading employee master DSCNV..." 
+    Application.StatusBar = "Reading employee master DSCNV..."
     ReadEmployeeMaster masterDict
     MergeEmployeeMaster dict, masterDict
 
@@ -281,8 +281,8 @@ Private Sub ReadFactorySheet( _
             Else
                 item = dict(employeeKey)
 
-                ' Giữ nguyên họ tên đúng như file Npn2023, không lowercase.
-                ' Nếu cùng nhân viên xuất hiện ở 2 xưởng thì ghép xưởng.
+                ' Gi? nguyên h? tên dúng nhu file Npn2023, không lowercase.
+                ' N?u cùng nhân viên xu?t hi?n ? 2 xu?ng thì ghép xu?ng.
                 If InStr(1, CStr(item(5)), factoryName, vbTextCompare) = 0 Then
                     item(5) = CStr(item(5)) & " + " & factoryName
                 End If
@@ -403,6 +403,8 @@ Private Sub ReadEmployeeMaster(ByVal masterDict As Object)
             sectionName = CleanText(CStr(wsEmp.Cells(r, COL_SECTION).Value))
 
             ' Array: CitizenID, Department, Section
+            ' CitizenID dã du?c chu?n hóa thành TEXT 12 s?.
+            ' Ví d? 89196005003 -> 089196005003.
             masterDict(employeeKey) = Array(citizenId, department, sectionName)
 
         End If
@@ -476,55 +478,55 @@ End Sub
 ' ============================================================
 
 Private Function NormalizeEmployeeKey(ByVal s As String) As String
-    ' Chỉ dùng để dò tên.
-    ' Không dùng giá trị này để hiển thị EmployeeName.
+    ' Ch? dùng d? dò tên.
+    ' Không dùng giá tr? này d? hi?n th? EmployeeName.
     s = CleanText(s)
     s = LCase$(s)
 
-    ' Loại một số dấu tiếng Việt để tăng khả năng match giữa 2 file.
+    ' Lo?i m?t s? d?u ti?ng Vi?t d? tang kh? nang match gi?a 2 file.
     s = Replace(s, "à", "a"): s = Replace(s, "á", "a")
-    s = Replace(s, "ạ", "a"): s = Replace(s, "ả", "a")
-    s = Replace(s, "ã", "a"): s = Replace(s, "ă", "a")
-    s = Replace(s, "ằ", "a"): s = Replace(s, "ắ", "a")
-    s = Replace(s, "ặ", "a"): s = Replace(s, "ẳ", "a")
-    s = Replace(s, "ẵ", "a"): s = Replace(s, "â", "a")
-    s = Replace(s, "ầ", "a"): s = Replace(s, "ấ", "a")
-    s = Replace(s, "ậ", "a"): s = Replace(s, "ẩ", "a")
-    s = Replace(s, "ẫ", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "?", "a")
+    s = Replace(s, "ã", "a"): s = Replace(s, "a", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "?", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "?", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "â", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "?", "a")
+    s = Replace(s, "?", "a"): s = Replace(s, "?", "a")
+    s = Replace(s, "?", "a")
 
     s = Replace(s, "è", "e"): s = Replace(s, "é", "e")
-    s = Replace(s, "ẹ", "e"): s = Replace(s, "ẻ", "e")
-    s = Replace(s, "ẽ", "e"): s = Replace(s, "ê", "e")
-    s = Replace(s, "ề", "e"): s = Replace(s, "ế", "e")
-    s = Replace(s, "ệ", "e"): s = Replace(s, "ể", "e")
-    s = Replace(s, "ễ", "e")
+    s = Replace(s, "?", "e"): s = Replace(s, "?", "e")
+    s = Replace(s, "?", "e"): s = Replace(s, "ê", "e")
+    s = Replace(s, "?", "e"): s = Replace(s, "?", "e")
+    s = Replace(s, "?", "e"): s = Replace(s, "?", "e")
+    s = Replace(s, "?", "e")
 
     s = Replace(s, "ì", "i"): s = Replace(s, "í", "i")
-    s = Replace(s, "ị", "i"): s = Replace(s, "ỉ", "i")
-    s = Replace(s, "ĩ", "i")
+    s = Replace(s, "?", "i"): s = Replace(s, "?", "i")
+    s = Replace(s, "i", "i")
 
     s = Replace(s, "ò", "o"): s = Replace(s, "ó", "o")
-    s = Replace(s, "ọ", "o"): s = Replace(s, "ỏ", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "?", "o")
     s = Replace(s, "õ", "o"): s = Replace(s, "ô", "o")
-    s = Replace(s, "ồ", "o"): s = Replace(s, "ố", "o")
-    s = Replace(s, "ộ", "o"): s = Replace(s, "ổ", "o")
-    s = Replace(s, "ỗ", "o"): s = Replace(s, "ơ", "o")
-    s = Replace(s, "ờ", "o"): s = Replace(s, "ớ", "o")
-    s = Replace(s, "ợ", "o"): s = Replace(s, "ở", "o")
-    s = Replace(s, "ỡ", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "?", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "?", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "o", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "?", "o")
+    s = Replace(s, "?", "o"): s = Replace(s, "?", "o")
+    s = Replace(s, "?", "o")
 
     s = Replace(s, "ù", "u"): s = Replace(s, "ú", "u")
-    s = Replace(s, "ụ", "u"): s = Replace(s, "ủ", "u")
-    s = Replace(s, "ũ", "u"): s = Replace(s, "ư", "u")
-    s = Replace(s, "ừ", "u"): s = Replace(s, "ứ", "u")
-    s = Replace(s, "ự", "u"): s = Replace(s, "ử", "u")
-    s = Replace(s, "ữ", "u")
+    s = Replace(s, "?", "u"): s = Replace(s, "?", "u")
+    s = Replace(s, "u", "u"): s = Replace(s, "u", "u")
+    s = Replace(s, "?", "u"): s = Replace(s, "?", "u")
+    s = Replace(s, "?", "u"): s = Replace(s, "?", "u")
+    s = Replace(s, "?", "u")
 
-    s = Replace(s, "ỳ", "y"): s = Replace(s, "ý", "y")
-    s = Replace(s, "ỵ", "y"): s = Replace(s, "ỷ", "y")
-    s = Replace(s, "ỹ", "y")
+    s = Replace(s, "?", "y"): s = Replace(s, "ý", "y")
+    s = Replace(s, "?", "y"): s = Replace(s, "?", "y")
+    s = Replace(s, "?", "y")
 
-    s = Replace(s, "đ", "d")
+    s = Replace(s, "d", "d")
 
     NormalizeEmployeeKey = s
 End Function
@@ -544,35 +546,83 @@ End Function
 Private Function ReadCitizenId(ByVal cell As Range) As String
     Dim s As String
     Dim v As Variant
+    Dim d As Double
 
-    ' .Text ưu tiên để giữ số 0 đầu nếu Excel đang hiển thị 12 chữ số.
+    On Error GoTo EH
+
+    ' ========================================================
+    ' CCCD luôn 12 ch? s?.
+    ' Uu tiên .Text vì n?u ô DSCNV dã là Text ho?c có d?u '
+    ' thì Excel s? gi? nguyên s? 0 d?u.
+    ' ========================================================
     On Error Resume Next
     s = Trim$(CStr(cell.Text))
-    On Error GoTo 0
+    On Error GoTo EH
 
+    s = Replace(s, ChrW(160), "")
     s = Replace(s, " ", "")
+    s = Replace(s, "'", "")
 
-    If Len(s) = 12 And IsAllDigits(s) Then
-        ReadCitizenId = s
+    ' Excel có th? hi?n th? s? ki?u 89196005003.000
+    If InStr(s, ".") > 0 Then
+        If IsNumeric(s) Then
+            d = CDbl(s)
+            s = Format$(d, "0")
+        End If
+    End If
+
+    If IsAllDigits(s) Then
+        If Len(s) <= 12 Then
+            ReadCitizenId = Right$("000000000000" & s, 12)
+            Exit Function
+        End If
+    End If
+
+    ' --------------------------------------------------------
+    ' Fallback: d?c Value2.
+    ' N?u ô là NUMBER, Format 12 s? d? khôi ph?c s? 0 d?u.
+    ' --------------------------------------------------------
+    v = cell.Value2
+
+    If IsError(v) Or IsEmpty(v) Or IsNull(v) Then
+        ReadCitizenId = ""
         Exit Function
     End If
 
-    v = cell.Value2
-
     If IsNumeric(v) Then
-        ' CCCD luôn 12 số.
-        ReadCitizenId = Format$(CDbl(v), "000000000000")
-        Exit Function
+        d = CDbl(v)
+        If d >= 0 And d < 1000000000000# Then
+            ReadCitizenId = Format$(d, "000000000000")
+            Exit Function
+        End If
     End If
 
     s = Trim$(CStr(v))
+    s = Replace(s, ChrW(160), "")
     s = Replace(s, " ", "")
+    s = Replace(s, "'", "")
 
-    If Len(s) > 0 And IsAllDigits(s) Then
-        ReadCitizenId = Right$("000000000000" & s, 12)
+    If InStr(s, ".") > 0 Then
+        If IsNumeric(s) Then
+            d = CDbl(s)
+            s = Format$(d, "0")
+        End If
+    End If
+
+    If IsAllDigits(s) Then
+        If Len(s) <= 12 Then
+            ReadCitizenId = Right$("000000000000" & s, 12)
+        Else
+            ReadCitizenId = ""
+        End If
     Else
         ReadCitizenId = ""
     End If
+
+    Exit Function
+
+EH:
+    ReadCitizenId = ""
 End Function
 
 Private Function IsAllDigits(ByVal s As String) As Boolean
@@ -619,7 +669,7 @@ Private Function MonthIndex(ByVal monthName As String) As Long
 End Function
 
 Private Function NormalizeEmployeeName(ByVal s As String) As String
-    ' Dùng cho tên HIỂN THỊ: giữ nguyên hoa/thường như file nguồn.
+    ' Dùng cho tên HI?N TH?: gi? nguyên hoa/thu?ng nhu file ngu?n.
     NormalizeEmployeeName = CleanText(s)
 End Function
 
