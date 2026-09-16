@@ -12,7 +12,7 @@ xl.EnableEvents = True
 xl.AskToUpdateLinks = False
 
 ' File containing the VBA module.
-Set wb = xl.Workbooks.Open("X:\DS + PN + TP - 2014\AnnualLeaveSync.xlsm", False, False)
+Set wb = xl.Workbooks.Open("D:\vtc\AnnualLeaveSync.xlsm", False, False)
 
 If Err.Number <> 0 Then
     xl.Quit
