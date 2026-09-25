@@ -73,8 +73,14 @@ Sub CopySpecificColumnsToGoogleSheets()
     For i = 8 To lastRow
         colH_Value = SafeCell(wsSource.Cells(i, 8))
         
-        ' Kiem tra neu cot H co chua so can cuoc (khong bi trong)
-        If Trim(colH_Value) <> "" Then
+        ' TỰ ĐỘNG XÓA BỎ DẤU NHÁY ĐƠN CŨ (NẾU CÓ) VÀ KHOẢNG TRẮNG
+        colH_Value = Trim(colH_Value)
+        If Left(colH_Value, 1) = "'" Then
+            colH_Value = Mid(colH_Value, 2)
+        End If
+        colH_Value = Trim(colH_Value)
+        ' === DIEU KIEN MOI: Chi lay dong có cot H dai dung 12 ky tu ===
+        If Len(colH_Value) = 12 Then
             validRowCount = validRowCount + 1
             
             Dim colB As String, colD As String, colE As String, colF As String, colG As String
@@ -86,7 +92,7 @@ Sub CopySpecificColumnsToGoogleSheets()
             colE = SafeCell(wsSource.Cells(i, 5))
             colF = SafeCell(wsSource.Cells(i, 6))
             colG = SafeCell(wsSource.Cells(i, 7))
-            colH_Value = (colH_Value)
+            colH_Value = "'" & colH_Value
             colAF = SafeCell(wsSource.Cells(i, 32))
             colAG = SafeCell(wsSource.Cells(i, 33))
             colAH = SafeCell(wsSource.Cells(i, 34))
