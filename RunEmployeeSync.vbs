@@ -7,7 +7,7 @@ xl.Visible = False
 xl.DisplayAlerts = False
 xl.EnableEvents = True
 xl.AskToUpdateLinks = False
-Set wb = xl.Workbooks.Open("D:\vtc\github\SyncPayroll.xlsm", False, False)
+Set wb = xl.Workbooks.Open("D:\vtc\github\EmployeeSync.xlsm", False, False)
 If Err.Number <> 0 Then xl.Quit : WScript.Quit 2
 Err.Clear
 xl.Run "RunSync"
