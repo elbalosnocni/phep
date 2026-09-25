@@ -174,18 +174,18 @@ Function SafeCell(rng As Range) As String
         Dim txt As String
         txt = CStr(rng.Value)
         
-        ' 1. X? lý d?u g?ch chéo ngu?c (ph?i thay th? d?u tiên d? tránh l?i ch?ng chéo)
+        ' 1. Xy ly dau gach cheo nguoc (phai thay the dau tiên de tránh loi chong chéo)
         txt = Replace(txt, "\", "\\")
         
-        ' 2. X? lý d?u ngo?c kép h?p l? cho JSON
+        ' 2. Xy ly dau ngoac kep hop le cho JSON
         txt = Replace(txt, """", "\""")
         
-        ' 3. X? lý ký t? xu?ng dòng (Alt + Enter trong Excel)
+        ' 3. Xy ly ky tu xuong dong (Alt + Enter trong Excel)
         txt = Replace(txt, vbCrLf, "\n")
         txt = Replace(txt, vbCr, "\n")
         txt = Replace(txt, vbLf, "\n")
         
-        ' 4. X? lý ký t? Tab (n?u có)
+        ' 4. Xy ly ky tu Tab
         txt = Replace(txt, vbTab, "\t")
         
         SafeCell = txt
