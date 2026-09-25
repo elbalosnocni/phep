@@ -10,7 +10,7 @@ Sub CopySpecificColumnsToGoogleSheets()
     ' === CAU HINH THONG TIN TAI DAY ===
     ' Hãy thay URL bên du?i b?ng URL b?n tri?n khai m?i nh?t c?a b?n n?u có thay d?i
     url = "https://script.google.com/macros/s/AKfycbxtfVxsHIdtX6Z5nSBbGSM52aD7oTiIYc8Yt_jv1o8OihVVE2VURsKJJmDjAzLxH7X7/exec"
-    passwordExcel = "123456"
+    passwordExcel = "DSCNV"
     folderPath = "\\192.168.0.253\vn hr\DS + PN + TP - 2014\"
     
     Dim googleSpreadsheetId As String
@@ -79,13 +79,12 @@ Sub CopySpecificColumnsToGoogleSheets()
             Dim colAO As String, colAP As String, colAQ As String, colAR As String, colAT As String, colAW As String
             
             colB = SafeCell(wsSource.Cells(i, 2))
+            colD = SafeCell(wsSource.Cells(i, 4))
+            colE = SafeCell(wsSource.Cells(i, 5))
+            ' Ép dinh dang Text bat buoc dd/mm/yyyy tu Excel d? d?y sang làm s?ch
+            colF = wsSource.Cells(i, 6).Text ' Ngày sinh Nam
+            colG = wsSource.Cells(i, 7).Text ' Ngày sinh Nu
             
-            ' Ép d?nh d?ng Text b?t bu?c dd/mm/yyyy t? Excel d? d?y sang làm s?ch
-            colD = wsSource.Cells(i, 4).Text ' Ngày sinh Nam
-            colE = wsSource.Cells(i, 5).Text ' Ngày sinh N?
-            
-            colF = SafeCell(wsSource.Cells(i, 6))
-            colG = SafeCell(wsSource.Cells(i, 7))
             
             colH_Value = "'" & colH_Value
             
