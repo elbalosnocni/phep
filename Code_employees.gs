@@ -30,19 +30,19 @@ function doPost(e) {
     
     if (Array.isArray(allRows) && allRows.length > 0) {
       var lastRow = sheet.getLastRow();
+      var numCols = allRows[0].length; // SỬA CHUẨN: Lấy chính xác số lượng cột thực tế gửi sang (16 cột)
       
-      var existingData = [];
-      var cccdMap = {}; 
+      // 1. Tải toàn bộ dữ liệu cũ trên Google Sheet vào bộ nhớ tạm để xử lý nhanh
+      var sheetData = [];
+      var cccdMap = {}; // Tra cứu dòng cũ dựa trên số CCCD
       
-      // Quét tìm CCCD cũ bắt đầu từ dòng số 2 (bỏ qua dòng tiêu đề 1)
       if (lastRow > 1) {
-        // Lấy dữ liệu cột Số Căn Cước trên Google Sheet (Vị trí cột số 6 - Cột F trong danh sách ghi xuống)
-        existingData = sheet.getRange(2, 6, lastRow - 1, 1).getValues();
-        for (var r = 0; r < existingData.length; r++) {
-          var cccdKey = existingData[r][0]; 
+        sheetData = sheet.getRange(2, 1, lastRow - 1, numCols).getValues();
+        for (var r = 0; r < sheetData.length; r++) {
+          var cccdKey = String(sheetData[r][5]); // CHUẨN XÁC: Số CCCD nằm ở Cột F (Index số 5 trong mảng Google Sheet)
           if (cccdKey) {
-            cccdKey = String(cccdKey).replace(/'/g, "").trim();
-            cccdMap[cccdKey] = r + 2; // Lưu số dòng thực tế trên Google Sheets
+            cccdKey = cccdKey.replace(/'/g, "").trim();
+            cccdMap[cccdKey] = r; // Lưu lại vị trí hàng trong mảng tạm sheetData
           }
         }
       }
@@ -50,31 +50,49 @@ function doPost(e) {
       var countInsert = 0;
       var countUpdate = 0;
       
+      // 2. Duyệt dữ liệu mới gửi từ VBA sang
       for (var i = 0; i < allRows.length; i++) {
         var rowData = allRows[i];
         
-        // Cột H trong chuỗi gửi từ VBA nằm ở vị trí số 5 (tính từ 0)
+        // Chuẩn hóa CCCD lấy từ vị trí index 5 của dòng dữ liệu gửi sang
         var rawCCCD = String(rowData[5]).replace(/'/g, "").trim();
         
-        // ĐÃ SỬA: Ép kiểu ngày chuẩn xác theo vị trí mảng JSON gửi sang (Index 1 là cột D, Index 2 là cột E)
-        rowData[1] = parseDateString(rowData[1]); // Ngày sinh Nam
-        rowData[2] = parseDateString(rowData[2]); // Ngày sinh Nữ
+        // CHUẨN XÁC VỊ TRÍ NGÀY SINH: Index 3 là cột F (Ngày sinh Nam), Index 4 là cột G (Ngày sinh Nữ)
+        rowData[3] = parseDateToStandard(rowData[3]); // Ngày sinh Nam (Lên Google sheet là cột D)
+        rowData[4] = parseDateToStandard(rowData[4]); // Ngày sinh Nữ (Lên Google sheet là cột E)
         
         if (cccdMap.hasOwnProperty(rawCCCD)) {
-          // TRÙNG CĂN CƯỚC -> CẬP NHẬT LẠI THÔNG TIN DÒNG CŨ
-          var targetRow = cccdMap[rawCCCD];
-          sheet.getRange(targetRow, 1, 1, rowData.length).setValues([rowData]);
+          // TRÙNG CĂN CƯỚC -> CẬP NHẬT ĐÈ TRONG MẢNG TẠM
+          var indexInSheetData = cccdMap[rawCCCD];
+          sheetData[indexInSheetData] = rowData;
           countUpdate++;
         } else {
-          // KHÔNG TRÙNG -> CHÈN DÒNG MỚI XUỐNG DƯỚI CÙNG
-          sheet.appendRow(rowData);
+          // KHÔNG TRÙNG -> THÊM MỚI VÀO CUỐI MẢNG TẠM
+          sheetData.push(rowData);
+          cccdMap[rawCCCD] = sheetData.length - 1; 
           countInsert++;
         }
       }
       
+      // 3. GHI HÀNG LOẠT XUỐNG SHEET (Chỉ gọi lệnh ghi đúng 1 lần duy nhất để chống Timeout)
+      if (sheetData.length > 0) {
+        // Xóa sạch vùng dữ liệu cũ dưới dòng tiêu đề để tránh bị lem hàng thừa cũ khi ghi đè
+        if (lastRow > 1) {
+          sheet.getRange(2, 1, sheet.getLastRow(), numCols).clearContent();
+        }
+        // Đổ mảng dữ liệu đã tối ưu xuống Google Sheet
+        sheet.getRange(2, 1, sheetData.length, numCols).setValues(sheetData);
+        
+        // ĐỊNH DẠNG NGÀY CHUẨN XÁC: Định dạng Cột D (Cột số 4) và Cột E (Cột số 5) thành Ngày tháng định dạng VN
+        sheet.getRange(2, 4, sheetData.length, 2).setNumberFormat("dd/mm/yyyy");
+        
+        // Ép kiểu hiển thị Cột F (Cột số 6 - CCCD) thành Plain Text để bảo vệ số 0 đầu số căn cước
+        sheet.getRange(2, 6, sheetData.length, 1).setNumberFormat("@");
+      }
+      
       return ContentService.createTextOutput(JSON.stringify({
         "status": "success", 
-        "message": "Da xu ly xong! Them moi: " + countInsert + " dong, Cap nhat trung: " + countUpdate + " dong."
+        "message": "Hoan thanh! Them moi: " + countInsert + " dong, Cap nhat trung: " + countUpdate + " dong."
       })).setMimeType(ContentService.MimeType.JSON);
       
     } else {
@@ -88,17 +106,22 @@ function doPost(e) {
   }
 }
 
-function parseDateString(dateStr) {
+// Hàm phân tích và định dạng ngày tháng sang chuẩn ISO yyyy-mm-dd để Google tự nhận biết kiểu Date
+function parseDateToStandard(dateStr) {
   if (!dateStr || String(dateStr).trim() === "") return "";
   var cleanStr = String(dateStr).trim();
   
   var parts = cleanStr.split("/");
   if (parts.length === 3) {
-    var day = parseInt(parts[0], 10);
-    var month = parseInt(parts[1], 10) - 1; 
-    var year = parseInt(parts[2], 10);
+    var day = parts[0];
+    var month = parts[1];
+    var year = parts[2];
+    
+    if (day.length === 1) day = "0" + day;
+    if (month.length === 1) month = "0" + month;
+    
     if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-      return new Date(year, month, day);
+      return year + "-" + month + "-" + day;
     }
   }
   return cleanStr; 
