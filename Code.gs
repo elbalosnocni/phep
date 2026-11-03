@@ -25,6 +25,9 @@
 const SHEET_NAME = 'LeaveData';
 const TIMEZONE = 'Asia/Ho_Chi_Minh';
 
+
+const SPREADSHEET_ID = '1bzHd64q9JXb8lMk7WWB0a_3fSNlvGLglGfx2kj0OfDs';
+
 const MONTHS = [
   'jan',
   'feb',
@@ -48,9 +51,9 @@ const MONTHS = [
  */
 function setupSheet() {
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-  // Luôn dùng giờ Việt Nam
+   // Luôn dùng giờ Việt Nam
   ss.setSpreadsheetTimeZone(TIMEZONE);
 
   let sh = ss.getSheetByName(SHEET_NAME);
@@ -351,7 +354,7 @@ function doGet(e) {
     // --------------------------------------------------------
     // Spreadsheet
     // --------------------------------------------------------
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sh = ss.getSheetByName(SHEET_NAME);
 
     if (!sh) {
